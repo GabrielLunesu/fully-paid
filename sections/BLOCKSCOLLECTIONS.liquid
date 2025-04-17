@@ -1,0 +1,133 @@
+<section id="shopify-section-template--{{ section.id }}" class="shopify-section shopify-section--collection-list">
+  <style>
+    #shopify-section-template--{{ section.id }} {
+      --collection-list-items-per-row: 1;
+    }
+
+    @media screen and (min-width: 700px) {
+      #shopify-section-template--{{ section.id }} {
+        --collection-list-items-per-row: 2;
+      }
+    }
+
+    @media screen and (min-width: 1150px) {
+      #shopify-section-template--{{ section.id }} {
+        --collection-list-item-size: unset;
+        --collection-list-items-per-row: 4;
+      }
+    }
+  </style>
+
+  <div class="color-scheme color-scheme--scheme-4374d1c7-966f-4fb1-964b-1f9f43f27ef7 color-scheme--bg-71ee18f73bd3fa07d5ce49ee27dcc9ee">
+    <div class="">
+      <div class="section-stack">
+        <div class="collection-list wrap">
+          {% for block in section.blocks %}
+            <a href="{{ block.settings.link }}" class="collection-card group{% if forloop.first %} is-selected{% endif %}">
+              <div class="content-over-media content-over-media--md" style="--content-over-media-overlay: 0 0 0 / {{ block.settings.overlay_opacity }}">
+                {% if block.settings.image %}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 800 }}"
+                    alt="{{ block.settings.image.alt | escape }}"
+                    width="800"
+                    height="800"
+                    loading="lazy"
+                    class="zoom-image group-hover:zoom"
+                    draggable="false"
+                    sizes="(max-width: 699px) 100vw, (max-width: 1149px) 50vw, 25vw">
+                {% endif %}
+                <div class="collection-card__content color-scheme color-scheme--scheme-8dbf89f9-5d4b-4020-9795-b88cf55a18cb prose prose--tight place-self-center text-center">
+                  <p class="h3">{{ block.settings.title }}</p>
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "BLOCKSCOLLECTIONS",
+  "tag": "section",
+  "class": "shopify-section--collection-list",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "collection_card",
+      "name": "Collection Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Collection Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Collection Title",
+          "default": "Collection Name"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Collection Link",
+          "default": "/collections/all"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Overlay Opacity (0 = none, 1 = full)",
+          "min": 0,
+          "max": 1,
+          "step": 0.1,
+          "default": 0.3
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "BLOCKSCOLLECTIONS",
+      "category": "Collection",
+      "blocks": [
+        {
+          "type": "collection_card",
+          "settings": {
+            "title": "Decken und Zubehör",
+            "link": "/collections/bettdecke-decken",
+            "overlay_opacity": 0.3
+          }
+        },
+        {
+          "type": "collection_card",
+          "settings": {
+            "title": "Lampen",
+            "link": "/collections/lampen-1",
+            "overlay_opacity": 0.3
+          }
+        },
+        {
+          "type": "collection_card",
+          "settings": {
+            "title": "Dekoration",
+            "link": "/collections/dekoration-1",
+            "overlay_opacity": 0.3
+          }
+        },
+        {
+          "type": "collection_card",
+          "settings": {
+            "title": "Kleidung",
+            "link": "/collections/wohnmode",
+            "overlay_opacity": 0.3
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

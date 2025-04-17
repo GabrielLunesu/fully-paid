@@ -1,0 +1,59 @@
+{{ 'newHero.css' | asset_url | stylesheet_tag }}
+
+<div class="new-hero icons_hero" style="--hero-bg: url('{{ section.settings.icon_hero_image | image_url: width: 2000 }}');">
+  <div class="new-hero__overlay">
+    <div class="new-hero__text-block icons-block">
+      <h1 class="new-hero__heading icons-head">{{ section.settings.icon_heading }}</h1>
+            <p class="new-hero__subheading icons-subhead">{{ section.settings.icon_subheading }}</p>
+
+      {% if section.settings.icon_button_text != blank %}
+        <a href="{{ section.settings.icon_button_link }}" class="new-hero__button icons-button">
+          {{ section.settings.icon_button_text }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "ICON HERO",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "icon_hero_image",
+      "label": "Hero Image"
+    },
+    {
+      "type": "text",
+      "id": "icon_heading",
+      "label": "Heading",
+      "default": "SUMMER '25"
+    },
+    {
+      "type": "text",
+      "id": "icon_subheading",
+      "label": "Subheading",
+      "default": "New Collection"
+    },
+    {
+      "type": "text",
+      "id": "icon_button_text",
+      "label": "Button Text",
+      "default": "Explore Now"
+    },
+    {
+      "type": "url",
+      "id": "icon_button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ICON HERO"
+    }
+  ]
+}
+{% endschema %}

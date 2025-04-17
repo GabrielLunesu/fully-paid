@@ -1,0 +1,105 @@
+{% schema %}
+{
+  "name": "Parcel Tracking App",
+  "tag": "section",
+  "class": "shopify-section--apps",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Parcel Tracking App",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="shopify-section shopify-section--apps">
+  <div class="color-scheme color-scheme--scheme-1 color-scheme--bg-19a3b39d3ef7faefc005eabfd860ae8f section-spacing bordered-section">
+    <div class="container">
+      <div class="shopify-block shopify-app-block">
+        <div></div>
+        <div id="pp-tracking-page-app" data-v-app="">
+          <script src="https://cdn.shopify.com/extensions/ada3d969-2f80-4917-aab2-a068a8a26732/parcel-panel-59/assets/tracking.js" async></script>
+          <script id="pp-tracking-init-data" type="application/json">
+            {
+              "track_result": [1, 1],
+              "hidden_result": "2,3,4,6,7,8",
+              "width": "1200px",
+              "color": "#008000",
+              "translation": {
+                "track_your_order": "Ihre Bestellung verfolgen",
+                "order_number": "Bestellnummer",
+                "email": "E-Mail-Adresse oder Telefonnummer",
+                "or": "Oder",
+                "tracking_number": "Tracking-Nummer",
+                "track": "Verfolgen"
+              },
+              "display_option": {
+                "carrier": false,
+                "tracking_number": true,
+                "order_item_info": true,
+                "map_widget": true,
+                "btn": true,
+                "product_recommend": true,
+                "tracking_info": true
+              },
+              "shopifyUrl": "https://elegare.de",
+              "proxyUrl": "https://elegare.de/apps/parcelpanel"
+            }
+          </script>
+          <div class="pp_tracking_content" data-theme="light" style="--pp-page-max-width: 1200px;">
+            <div class="pp_tracking_form_div both_form">
+              <h1 class="pp_tracking_title">Ihre Bestellung verfolgen</h1>
+              <div class="pp_tracking_tab">
+                <div class="pp_tracking_tab_left pp_active"><span>Bestellnummer</span></div>
+                <div class="pp_tracking_tab_left"><span>Tracking-Nummer</span></div>
+              </div>
+
+              <div class="pp_tracking_form_in">
+                <div class="pp_tracking_form_order">
+                  <form class="pp_tracking_form pp_action_one PP-FormLayout">
+                    <div class="pp_tracking_parent PP-FormLayout__Item">
+                      <div class="pp_tracking_span"><span>Bestellnummer</span></div>
+                      <div class="pp_tracking_input">
+                        <input class="PP-TextField__Input Form__Input input" type="text" name="order">
+                      </div>
+                    </div>
+                    <div class="pp_tracking_parent PP-FormLayout__Item">
+                      <div class="pp_tracking_span"><span>E-Mail-Adresse oder Telefonnummer</span></div>
+                      <div class="pp_tracking_input">
+                        <input class="PP-TextField__Input Form__Input input" type="text" name="email">
+                      </div>
+                    </div>
+                    <div class="pp_tracking_button PP-FormLayout__Item">
+                      <button type="button" class="pp-button-enter button-enter btn button styled-submit pp_enter_submit0 Button Button--secondary Button--full">Verfolgen</button>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="pp_tracking_line_center">
+                  <div class="pp_tracking_word">Oder</div>
+                </div>
+
+                <div class="pp_tracking_form_number">
+                  <form class="pp_tracking_form pp_action_two PP-FormLayout">
+                    <div class="pp_tracking_parent PP-FormLayout__Item">
+                      <div class="pp_tracking_span"><span>Tracking-Nummer</span></div>
+                      <div class="pp_tracking_input">
+                        <input class="PP-TextField__Input Form__Input input" type="text" name="nums">
+                      </div>
+                    </div>
+                    <div class="pp_tracking_button PP-FormLayout__Item">
+                      <button type="button" class="pp-button-enter button-enter btn button styled-submit pp_enter_submit1 Button Button--secondary Button--full">Verfolgen</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,136 @@
+.product-badge.sale {
+  background-color: #b08a53;
+}
+
+.square-carousel-section {
+  padding: 4rem 2rem;
+  overflow: hidden;
+}
+
+.square-carousel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.square-carousel-text h2 {
+  font-family: "Montserrat";
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.square-carousel-text p {
+  font-family: Montserrat, sans-serif;
+
+  margin: 0.25rem 0 0;
+  color: #555;
+}
+
+.square-carousel-button {
+  background: #000;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+}
+
+.carousel-wrapper {
+  position: relative;
+}
+
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+.carousel-card {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+  width: 74vw;
+  max-width: 320px;
+  position: relative;
+  text-align: center;
+  padding: 1rem;
+}
+@media screen and (max-width: 700px) {
+  .square-carousel-header {
+    align-content: center;
+    text-align: center;
+    justify-content: center;
+  }
+  .carousel-arrow {
+    display: none;
+  }
+  .carousel-card {
+    width: 60vw;
+  }
+  .square-carousel-section {
+    padding: 1rem 0;
+  }
+}
+@media screen and (min-width: 700px) {
+  .carousel-card {
+    width: 36vw;
+  }
+}
+@media screen and (min-width: 1000px) {
+  .carousel-card {
+    width: calc(100% / 4 - 1.5rem);
+  }
+}
+
+.carousel-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.product-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background-color: #333;
+  color: #fff;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.carousel-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+.carousel-price {
+  font-size: 1rem;
+  color: #333;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #000;
+  color: #fff;
+  padding: 0.75rem 1rem;
+  border: none;
+  cursor: pointer;
+  z-index: 5;
+  font-size: 1.5rem;
+}
+.carousel-arrow.left {
+  left: 0;
+}
+.carousel-arrow.right {
+  right: 0;
+}

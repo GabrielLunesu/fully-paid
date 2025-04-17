@@ -1,0 +1,121 @@
+{% comment %}
+  Manual Instafeed Section — 2-per-slide Carousel
+  Features:
+  - Fully manual image blocks
+  - 2 items per visible slide (mobile)
+  - 6 grid layout on desktop
+  - Optional overlay icon on hover
+  - Dynamic heading
+{% endcomment %}
+    {{ 'instagram.css' | asset_url | stylesheet_tag }}
+
+<section id="{{ section.id }}" class="manual-instafeed-section">
+  <div class="instafeed-container">
+    <h2 class="instafeed-heading">{{ section.settings.heading }}</h2>
+
+    <div class="instafeed-slider-wrapper" id="instafeed-slider-wrapper">
+      <div class="instafeed-slider" id="instafeed-slider">
+        {% for block in section.blocks %}
+          {% assign mod = forloop.index0 | modulo: 2 %}
+          {% if mod == 0 %}<div class="instafeed-slide">{% endif %}
+
+          <div class="instafeed-item">
+            <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.alt }}">
+
+            <div class="instafeed-hover">
+              <div class="hover-icon-wrapper">
+                <img
+                  src="{{ block.settings.icon | default: 'https://instafeed.nfcube.com/assets/img/instagram-icon-v2.svg' }}"
+                  alt="icon"
+                  class="hover-icon"
+                >
+              </div>
+            </div>
+          </div>
+
+          {% if mod == 1 or forloop.last %}</div>{% endif %}
+        {% endfor %}
+      </div>
+
+      {% if section.settings.show_arrows %}
+        <button class="instafeed-arrow prev" onclick="instafeedSlide(-1)">❮</button>
+        <button class="instafeed-arrow next" onclick="instafeedSlide(1)">❯</button>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+
+<script>
+  let instafeedIndex = 0;
+  function instafeedSlide(dir) {
+    const slider = document.getElementById('instafeed-slider');
+    const slides = slider.querySelectorAll('.instafeed-slide');
+    const total = slides.length;
+    instafeedIndex += dir;
+    if (instafeedIndex < 0) instafeedIndex = 0;
+    if (instafeedIndex >= total) instafeedIndex = total - 1;
+    slider.style.transform = `translateX(-${instafeedIndex * 100}%)`;
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Manual Instafeed Carousel",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "TAG US TO GET FEATURED @ICON"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show Navigation Arrows",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Instagram Post",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Instagram Image"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Alt Text",
+          "default": "Instagram post"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link to Instagram Post"
+        },
+        {
+          "type": "url",
+          "id": "icon",
+          "label": "Overlay Icon (Optional)"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Manual 2x Instafeed",
+      "blocks": [
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,165 @@
+<section id="shopify-section-template--{{ section.id }}" class="shopify-section shopify-section--media-grid">
+  <style>
+    #shopify-section-template--{{ section.id }} {
+      --media-grid-row-height: 220px;
+      --media-grid-gap: 1.5rem;
+    }
+
+    @media screen and (min-width: 700px) {
+      #shopify-section-template--{{ section.id }} {
+        --media-grid-row-height: 290px;
+      }
+    }
+
+    @media screen and (min-width: 1150px) {
+      #shopify-section-template--{{ section.id }} {
+        --media-grid-gap: 1.875rem;
+      }
+    }
+  </style>
+
+  <div class="section-spacing color-scheme color-scheme--scheme-953821b3-cab1-4eb8-84d4-8ae8655d93b6 color-scheme--bg-fbe1eca9a2e43407cbaadbca72403aa2">
+    <div class="container container--lg">
+      <div class="section-stack">
+        <media-grid class="media-grid">
+          {% for block in section.blocks %}
+            <a href="{{ block.settings.link }}" class="media-grid__item"
+              style="--media-grid-item-column-span: {{ block.settings.col_span }}; --media-grid-item-row-span: {{ block.settings.row_span }}">
+              <div class="content-over-media color-scheme color-scheme--scheme-8dbf89f9-5d4b-4020-9795-b88cf55a18cb group"
+                reveal-on-scroll="true"
+                style="--content-over-media-overlay: 0 0 0 / {{ block.settings.overlay_opacity }}; opacity: 1;">
+                {% if block.settings.image %}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 1600 }}"
+                    alt="{{ block.settings.image.alt | escape }}"
+                    width="1600"
+                    height="1600"
+                    class="zoom-image group-hover:zoom"
+                    loading="lazy"
+                    sizes="(max-width: 699px) 100vw, {{ block.settings.col_span | divided_by: 12.0 | times: 100 }}vw">
+                {% endif %}
+                <div class="prose prose--tight place-self-center text-center">
+                  {% if block.settings.title != blank %}
+                    <p class="h4">{{ block.settings.title }}</p>
+                  {% endif %}
+                  {% if block.settings.button_text != blank %}
+                    <button type="button" class="button">{{ block.settings.button_text }}</button>
+                  {% endif %}
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        </media-grid>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "BLOCKSIMAGES",
+  "tag": "section",
+  "class": "shopify-section--media-grid",
+  "max_blocks": 12,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "media_item",
+      "name": "Grid Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Entdecken Sie unsere Osterartikel"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Siehe"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "default": "/collections/all"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Overlay Opacity (0 = none, 1 = full)",
+          "min": 0,
+          "max": 1,
+          "step": 0.1,
+          "default": 0.3
+        },
+        {
+          "type": "range",
+          "id": "col_span",
+          "label": "Column Span (1–12)",
+          "min": 1,
+          "max": 12,
+          "step": 1,
+          "default": 6
+        },
+        {
+          "type": "range",
+          "id": "row_span",
+          "label": "Row Span (1–4)",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 2
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BLOCKSIMAGES",
+      "category": "Image",
+      "blocks": [
+        {
+          "type": "media_item",
+          "settings": {
+            "title": "Entdecken Sie unsere Osterartikel",
+            "button_text": "Siehe",
+            "link": "/collections/osterartikel",
+            "overlay_opacity": 0.3,
+            "col_span": 8,
+            "row_span": 2
+          }
+        },
+        {
+          "type": "media_item",
+          "settings": {
+            "title": "Bleiben Sie warm mit unseren Kuscheldecken",
+            "button_text": "Siehe",
+            "link": "/collections/decken-und-bezuge",
+            "overlay_opacity": 0.3,
+            "col_span": 4,
+            "row_span": 1
+          }
+        },
+        {
+          "type": "media_item",
+          "settings": {
+            "title": "Die bequeme Kleidung, die Sie brauchen",
+            "button_text": "Siehe",
+            "link": "/collections/wohnmode",
+            "overlay_opacity": 0.3,
+            "col_span": 4,
+            "row_span": 1
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

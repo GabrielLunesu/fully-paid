@@ -1,0 +1,152 @@
+<product-sticky-bar class="product-sticky-bar">
+  {% if product %}
+    <div class="product-sticky-bar__info sm-max:hidden">
+      <div class="h-stack gap-6">
+        <variant-media widths="60,120,180">
+          <img
+            id="sticky-product-image"
+            src="{{ product.featured_image | image_url: width: 60 }}"
+            srcset="{{ product.featured_image | image_url: width: 60 }} 60w, {{ product.featured_image | image_url: width: 120 }} 120w, {{ product.featured_image | image_url: width: 180 }} 180w"
+            alt="{{ product.title }}"
+            width="60"
+            height="60"
+            loading="lazy"
+            sizes="60px"
+          />
+        </variant-media>
+        <div class="v-stack">
+          <span id="sticky-product-title" class="h6">{{ product.title }}</span>
+          <price-list role="region" aria-live="polite" class="price-list">
+            <sale-price class="h6 text-on-sale">
+              <span class="sr-only">Angebot</span>
+              <span id="sticky-product-price">{{ product.price | money }}</span>
+            </sale-price>
+            {% if product.compare_at_price_max > product.price %}
+            <compare-at-price class="h6 text-subdued line-through">
+              <span class="sr-only">Regulärer Preis</span>
+              <span id="sticky-product-compare">{{ product.compare_at_price_max | money }}</span>
+            </compare-at-price>
+            <span class="cstm-discount-percentage tt" id="sticky-product-discount">
+              -{{ 100.0 | minus: product.price | times: 100.0 | divided_by: product.compare_at_price_max | round }}%
+            </span>
+            {% endif %}
+          </price-list>
+        </div>
+      </div>
+    </div>
+{%- render 'buy-buttons',
+                  block: block,
+                  product: product,
+                  product_form_id: product_form_id,
+                  section_id: section.id,
+                  show_pickup_availability: true
+                -%}
+  {% else %}
+    <p style="padding: 1rem; background: #fff3cd; color: #856404; border: 1px solid #ffeeba;">
+      🟡 Sticky bar only works on product pages.
+    </p>
+  {% endif %}
+</product-sticky-bar>
+
+<style>
+  .product-sticky-bar {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    background: white;
+    padding: 1rem;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .product-sticky-bar.is-visible {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const announcement = document.getElementById('shopify-section-announcement-bar');
+    const header = document.querySelector('.header');
+
+    if (announcement) {
+      document.documentElement.style.setProperty('--announcement-bar-height', `${announcement.offsetHeight}px`);
+    }
+
+    if (header) {
+      document.documentElement.style.setProperty('--header-height', `${header.offsetHeight}px`);
+    }
+
+    // Let other sections know these are sticky
+    document.documentElement.style.setProperty('--header-is-sticky', 1);
+    document.documentElement.style.setProperty('--announcement-bar-is-sticky', 1);
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const productForm = document.querySelector("form[id^='product-form']");
+    const sticky = document.querySelector('.product-sticky-bar');
+
+    function updateStickyBar(variant) {
+      const priceEl = document.getElementById("sticky-product-price");
+      const compareEl = document.getElementById("sticky-product-compare");
+      const discountEl = document.getElementById("sticky-product-discount");
+      const imageEl = document.getElementById("sticky-product-image");
+
+      const price = variant.price / 100;
+      const compare = variant.compare_at_price / 100;
+
+      priceEl.textContent = `€${price.toFixed(2)}`;
+
+      if (compare > price) {
+        compareEl.textContent = `€${compare.toFixed(2)}`;
+        discountEl.textContent = `-${Math.round(((compare - price) / compare) * 100)}%`;
+        compareEl?.parentElement?.style?.setProperty("display", "inline");
+        discountEl?.style?.setProperty("display", "inline");
+      } else {
+        compareEl?.parentElement?.style?.setProperty("display", "none");
+        discountEl?.style?.setProperty("display", "none");
+      }
+
+      if (variant.featured_image && imageEl) {
+        imageEl.src = variant.featured_image.src;
+        imageEl.srcset = `${variant.featured_image.src} 60w, ${variant.featured_image.src} 120w, ${variant.featured_image.src} 180w`;
+      }
+    }
+
+    if (sticky) {
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 500) {
+          sticky.classList.add('is-visible');
+        } else {
+          sticky.classList.remove('is-visible');
+        }
+      });
+    }
+
+    document.addEventListener("variant:change", function (event) {
+      const variant = event.detail.variant;
+      if (variant) {
+        updateStickyBar(variant);
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product Sticky Bar",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Product Sticky Bar",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

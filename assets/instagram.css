@@ -1,0 +1,193 @@
+@media screen and (max-width: 768px) {
+  .instafeed-slider-wrapper {
+    overflow-x: auto !important;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    display: block;
+    padding-bottom: 1rem;
+  }
+
+  .instafeed-slider {
+    display: flex !important;
+    flex-wrap: nowrap;
+    width: max-content !important;
+    transform: none !important;
+  }
+
+  .instafeed-slide {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    scroll-snap-align: start;
+    margin-right: 16px;
+  }
+  .instafeed-item {
+    width: 10vw;
+
+    flex: 0 0 80vw;
+  }
+
+  .instafeed-arrow {
+    display: none !important;
+  }
+}
+
+.instafeed-hover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  text-decoration: none;
+  z-index: 2;
+}
+
+.instafeed-item:hover .instafeed-hover {
+  opacity: 1;
+}
+
+.hover-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: auto;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.hover-icon {
+  width: 24px;
+  height: 24px;
+  filter: invert(
+    0
+  ); /* or invert(1) if your icon is black and background is dark */
+}
+
+.hover-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.manual-instafeed-section {
+  background: #fff;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.instafeed-heading {
+  font-weight: bold;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.instafeed-slider-wrapper {
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.instafeed-slider {
+  display: flex;
+  transition: transform 0.4s ease-in-out;
+  width: 100%;
+}
+
+.instafeed-slide {
+  margin-right: 10px;
+  flex: 0 0 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  scroll-snap-align: start;
+}
+
+.instafeed-item {
+  flex: 0 0 48%;
+  position: relative;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+}
+
+.instafeed-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 0;
+}
+
+.instafeed-hover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.instafeed-item:hover .instafeed-hover {
+  opacity: 1;
+}
+
+.hover-icon {
+  width: 28px;
+  height: 28px;
+  filter: invert(1);
+}
+
+.instafeed-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  border: none;
+  padding: 8px 12px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 5;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.instafeed-arrow.prev {
+  left: 5px;
+}
+.instafeed-arrow.next {
+  right: 5px;
+}
+
+@media screen and (min-width: 1024px) {
+  .instafeed-slider-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    width: 95%;
+  }
+
+  .instafeed-arrow {
+    display: none !important;
+  }
+
+  .instafeed-item {
+    display: block;
+    width: 100%;
+  }
+}

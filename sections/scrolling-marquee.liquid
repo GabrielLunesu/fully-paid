@@ -1,0 +1,143 @@
+<section id="shopify-section-template--{{ section.id }}" class="shopify-section shopify-section--scrolling-content">
+  <style>
+    #shopify-section-template--{{ section.id }} {
+      --section-vertical-spacing: clamp(10px, calc(10px + (10 - 10) * ((100vw - 375px) / (1400 - 375))), 10px);
+      --scrolling-content-content-gap: clamp(30px, calc(30px + (35 - 30) * ((100vw - 375px) / (1400 - 375))), 35px);
+      font-size: clamp({{ section.settings.font_size }}px, {{ section.settings.font_size }}px, {{ section.settings.font_size }}px);
+    }
+
+    .section-spacing.color-scheme.color-scheme--bg-c1f8cb21047e4797e94d0969dc5d1e44.section-spacing--padded.bordered-section {
+      padding: 0;
+    }
+
+    .announcement-marquee {
+      overflow: hidden;
+      background-color: {{ section.settings.bg_color }};
+      color: {{ section.settings.text_color }};
+      padding: 10px 0;
+      white-space: nowrap;
+      font-size: {{ section.settings.font_size }}px;
+      border-top: 1px solid rgb(62, 62, 62);
+      border-bottom: 1px solid rgb(62, 62, 62);
+    }
+
+    .announcement-track {
+      display: inline-block;
+      white-space: nowrap;
+      animation: scroll-left {{ section.settings.scroll_speed }}s linear infinite;
+    }
+
+    .announcement-item {
+      display: inline-block;
+      margin-right: 2.5rem;
+    }
+
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+  </style>
+
+  <div class="section-spacing color-scheme color-scheme--bg-c1f8cb21047e4797e94d0969dc5d1e44 section-spacing--padded bordered-section"
+    style="--background: 28 28 28 ; background-color: rgb(var(--background)); --text-color: 255 255 255; color: rgb(var(--text-color)); --border-color: 62 62 62;">
+    
+    <div class="announcement-marquee">
+      <div class="announcement-track">
+        {% for i in (1..5) %}
+  {% for block in section.blocks %}
+    <span class="scrolling-content__text heading announcement-item">
+      {{ block.settings.text }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•
+    </span>
+  {% endfor %}
+{% endfor %}
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Scrolling Marquee",
+  "tag": "section",
+  "class": "shopify-section--scrolling-content",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#1c1c1c"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "label": "Scroll Speed (seconds)",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font Size (px)",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "default": 16
+    }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Marquee Message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Message",
+          "default": "Vorübergehend bis zu 50% Rabatt!"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Scrolling Marquee",
+      "category": "Text",
+      "settings": {
+        "bg_color": "#1c1c1c",
+        "text_color": "#ffffff",
+        "scroll_speed": 12,
+        "font_size": 16
+      },
+      "blocks": [
+        {
+          "type": "message",
+          "settings": {
+            "text": "Vorübergehend bis zu 50% Rabatt!"
+          }
+        },
+        {
+          "type": "message",
+          "settings": {
+            "text": "Frühjahrsausverkauf – Solange der Vorrat reicht!"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

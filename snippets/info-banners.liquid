@@ -1,0 +1,44 @@
+<div style="display: flex; gap: 10px; justify-content: center; min-width: 260px; align-items: center; width: 100%; max-width: 600px; margin: auto;">
+  
+  <!-- Left Section: Rotating Banner -->
+  <div style="background-color: #f9f9f9; border-radius: 8px; padding: 10px; display: flex; align-items: center; gap: 10px; width: 100%; max-width: 100%; box-sizing: border-box; flex: 1; min-height: 60px; justify-content: center; transition: all 0.5s ease-in-out;">
+    <img id="switch-icon" src="https://cdn.shopify.com/s/files/1/0761/8517/4353/files/paypal-icon-2048x2048-ykm9wpd4.png?v=1739467438" alt="Sichere Bezahlung mit PayPal & Klarna" width="24" height="24" style="display: block;">
+    <span id="switch-text" style="font-size: 12px; color: #333;">Sichere Bezahlung mit <strong>PayPal & Klarna</strong></span>
+  </div>
+
+  <!-- Right Section: Stock Status -->
+  <div id="stock-status" style="background-color: #f9f9f9; border-radius: 8px; padding: 10px; min-height: 60px; display: flex; align-items: center; flex: 1; justify-content: center;">
+    {% assign variant = product.selected_or_first_available_variant %}
+    {% if variant.available %}
+      <span id="stock-status-dot" style="width: 10px; height: 10px; background-color: #4d7c0f; border-radius: 50%; display: inline-block; margin-right: 8px;"></span>
+      <span id="stock-status-text" style="font-size: 12px;">Auf Lager, bereit zum Versand</span>
+    {% else %}
+      <span id="stock-status-dot" style="width: 10px; height: 10px; background-color: #dc2626; border-radius: 50%; display: inline-block; margin-right: 8px;"></span>
+      <span id="stock-status-text" style="font-size: 12px;">Momentan ausverkauft</span>
+    {% endif %}
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.querySelector('form[data-product-form]');
+  const dot = document.getElementById('stock-status-dot');
+  const text = document.getElementById('stock-status-text');
+
+  if (!form) return;
+
+  form.addEventListener('change', () => {
+    const variantId = form.querySelector('[name="id"]').value;
+    const variant = window.meta?.product?.variants?.find(v => v.id == variantId);
+
+    if (!variant) return;
+
+    if (variant.available) {
+      dot.style.backgroundColor = '#4d7c0f'; // green
+      text.innerHTML = 'Auf Lager, bereit zum Versand';
+    } else {
+      dot.style.backgroundColor = '#dc2626'; // red
+      text.innerHTML = 'Momentan ausverkauft';
+    }
+  });
+});
+</script>

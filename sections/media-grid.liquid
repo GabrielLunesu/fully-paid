@@ -1,0 +1,143 @@
+<section id="shopify-section-template--{{ section.id }}" class="shopify-section shopify-section--media-grid">
+  <style>
+    #shopify-section-template--{{ section.id }} {
+      --media-grid-row-height: 140px;
+      --media-grid-gap: 2rem;
+      --container-gutter: var(--media-grid-gap);
+      --section-vertical-spacing-override: var(--media-grid-gap);
+    }
+
+    @media screen and (min-width: 700px) {
+      #shopify-section-template--{{ section.id }} {
+        --media-grid-row-height: 210px;
+      }
+    }
+
+    @media screen and (min-width: 1150px) {
+      #shopify-section-template--{{ section.id }} {
+        --media-grid-gap: 2.5rem;
+      }
+    }
+  </style>
+
+  <div class="section-spacing color-scheme color-scheme--scheme-1 color-scheme--bg-19a3b39d3ef7faefc005eabfd860ae8f bordered-section">
+    <div class="container ">
+      <div class="section-stack">
+        <media-grid class="media-grid">
+          {% for block in section.blocks %}
+            <a href="{{ block.settings.link }}" class="media-grid__item" style="--media-grid-item-column-span: 6; --media-grid-item-row-span: 2">
+              <div class="content-over-media color-scheme color-scheme--scheme-3 group" reveal-on-scroll="true" style="--content-over-media-overlay: 0 0 0 / {{ block.settings.overlay_opacity }}; opacity: 1;">
+                {% if block.settings.image != blank %}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 1600 }}"
+                    alt="{{ block.settings.image.alt | escape }}"
+                    width="1600"
+                    height="1600"
+                    class="zoom-image group-hover:zoom"
+                    sizes="(max-width: 699px) 100vw, 50vw"
+                    loading="lazy"
+                  >
+                {% endif %}
+                <div class="prose prose--tight place-self-center text-center">
+                  {% if block.settings.title != blank %}
+                    <p class="h2">{{ block.settings.title }}</p>
+                  {% endif %}
+                  {% if block.settings.subtitle != blank %}
+                    <h3>{{ block.settings.subtitle }}</h3>
+                  {% endif %}
+                  {% if block.settings.button_text != blank %}
+                    <button type="button" class="button">{{ block.settings.button_text }}</button>
+                  {% endif %}
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        </media-grid>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Media Grid",
+  "tag": "section",
+  "class": "shopify-section--media-grid",
+  "max_blocks": 12,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "media_item",
+      "name": "Grid Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Headline"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "Description below the headline"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Jetzt shoppen"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "default": "/collections/all"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Overlay Opacity (0 = none, 1 = full)",
+          "min": 0,
+          "max": 1,
+          "step": 0.1,
+          "default": 0.2
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Media Grid",
+      "category": "Image",
+      "blocks": [
+        {
+          "type": "media_item",
+          "settings": {
+            "title": "Warum sollte Ihnen kalt sein?",
+            "subtitle": "Warme und kuschelige Decken",
+            "button_text": "Jetzt Shoppen",
+            "link": "/collections/bettdecke-decken",
+            "overlay_opacity": 0.1
+          }
+        },
+        {
+          "type": "media_item",
+          "settings": {
+            "title": "Best Sellers",
+            "subtitle": "Entdecken Sie unsere beliebtesten Produkte",
+            "button_text": "Jetzt shoppen",
+            "link": "/collections/avada-best-sellers",
+            "overlay_opacity": 0.27
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,184 @@
+
+
+
+<aside id="shopify-section-announcement-bar" class="announcement-sticky shopify-section shopify-section-group-header-group shopify-section--announcement-bar">
+    <style>
+svg.icon.icon-arrow-left.icon--direction-aware ,svg.icon.icon-arrow-right.icon--direction-aware{
+    background: rgb(28,28,28 );
+    height: 100%;
+}
+      p.prose.heading {
+    font-size: 0.6rem;
+}
+    :root {
+      --announcement-bar-is-sticky: 1;
+    }#shopify-section-sections--24652808946001__announcement-bar {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+      }
+
+      .shopify-section--header ~ #shopify-section-sections--24652808946001__announcement-bar {
+        top: calc(var(--header-is-sticky, 0) * var(--header-height, 0px));
+        z-index: 4; /* We have to lower the z-index in case the announcement bar is displayed after the header */
+      }#shopify-section-sections--24652808946001__announcement-bar {
+      --announcement-bar-font-size: 0.625rem;
+    }
+
+    @media screen and (min-width: 999px) {
+      #shopify-section-sections--24652808946001__announcement-bar {
+        --announcement-bar-font-size: 0.6875rem;
+      }
+    }
+  </style>
+  <height-observer variable="announcement-bar">
+    <div class="announcement-bar color-scheme color-scheme--scheme-3">
+      <button type="button" is="carousel-prev-button" class="tap-area" aria-controls="carousel-sections--24652808946001__announcement-bar">
+        <span class="sr-only">Zurück</span>
+        <svg aria-hidden="true" focusable="false" fill="none" width="12" class="icon icon-arrow-left icon--direction-aware" viewBox="0 0 16 18">
+          <path d="M11 1 3 9l8 8" stroke="currentColor" stroke-linecap="square"></path>
+        </svg>
+      </button>
+
+      <announcement-bar-carousel allow-swipe="" autoplay="4" id="carousel-sections--24652808946001__announcement-bar" class="announcement-bar__carousel" tabindex="0">
+  {% for block in section.blocks %}
+    {{ block.settings.text | replace: '<p', '<p class="prose heading probea" style="display: none;"' }}
+
+  {% endfor %}
+</announcement-bar-carousel>
+
+      <button type="button" is="carousel-next-button" class="tap-area" aria-controls="carousel-sections--24652808946001__announcement-bar">
+        <span class="sr-only">Vor</span>
+        <svg aria-hidden="true" focusable="false" fill="none" width="12" class="icon icon-arrow-right icon--direction-aware" viewBox="0 0 16 18">
+          <path d="m5 17 8-8-8-8" stroke="currentColor" stroke-linecap="square"></path>
+        </svg>
+      </button>
+    </div>
+  </height-observer>
+
+  <script>
+    document.documentElement.style.setProperty('--announcement-bar-height', `${Math.round(document.getElementById('shopify-section-sections--24652808946001__announcement-bar').clientHeight)}px`);
+  </script>
+  <script>
+    document.documentElement.style.setProperty('--announcement-bar-height', `${Math.round(document.getElementById('shopify-section-announcement-bar').clientHeight)}px`);
+  </script>
+  <script>
+  const carousel = document.querySelector('#carousel-sections--24652808946001__announcement-bar');
+  const items = carousel?.querySelectorAll('p');
+  let current = 0;
+
+function showSlide(index) {
+  items.forEach((item, i) => {
+    if (item.classList.contains('is-selected')) {
+      item.classList.remove('is-selected');
+      item.classList.add('is-exiting');
+
+      // Wait for fade-out to finish before hiding
+      setTimeout(() => {
+        item.classList.remove('is-exiting');
+        item.style.display = 'none';
+      }, 300); // Match the CSS transition duration
+    }
+
+    if (i === index) {
+      // Ensure it starts fresh each time
+      item.style.display = 'block';
+      item.classList.add('is-entering');
+
+      // Force reflow to restart animation
+      void item.offsetWidth;
+
+      // Animate in
+      requestAnimationFrame(() => {
+        item.classList.remove('is-entering');
+        item.classList.add('is-selected');
+      });
+    }
+  });
+}
+
+
+
+  function nextSlide() {
+    current = (current + 1) % items.length;
+    showSlide(current);
+  }
+
+  function prevSlide() {
+    current = (current - 1 + items.length) % items.length;
+    showSlide(current);
+  }
+
+  // Auto-rotate every 5 seconds
+  let interval = setInterval(nextSlide, 5000);
+
+  // Button controls
+  document.querySelector('[is="carousel-next-button"]')?.addEventListener('click', () => {
+    nextSlide();
+    resetInterval();
+  });
+
+  document.querySelector('[is="carousel-prev-button"]')?.addEventListener('click', () => {
+    prevSlide();
+    resetInterval();
+  });
+
+  function resetInterval() {
+    clearInterval(interval);
+    interval = setInterval(nextSlide, 5000);
+  }
+
+  // Init
+  showSlide(current);
+</script>
+</aside>
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "tag": "section",
+  "class": "shopify-section--announcement-bar",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Announcement Text",
+          "default": "<p>Sichere Zahlung mit <strong>PayPal</strong> und <strong>Klarna</strong></p>"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "Default",
+      "category": "Header",
+      "blocks": [
+        {
+          "type": "message",
+          "settings": {
+            "text": "<p>Sichere Zahlung mit <strong>PayPal</strong> und <strong>Klarna</strong></p>"
+          }
+        },
+        {
+          "type": "message",
+          "settings": {
+            "text": "<p><strong>Kostenloser Versand</strong> auf alle Bestellungen</p>"
+          }
+        },
+        {
+          "type": "message",
+          "settings": {
+            "text": "<p><strong>Probleme?</strong> Mailen Sie uns: <a href=\"mailto:info@elegare.de\">info@elegare.de</a></p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

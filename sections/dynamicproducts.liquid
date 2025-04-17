@@ -1,0 +1,96 @@
+{% comment %}
+Snippet: dynamic-product-review.liquid
+Usage: {% render 'dynamic-product-review', section: section %}
+{% endcomment %}
+  <div class="reviews-grid">
+
+{% for block in section.blocks %}
+<div tabindex="0" role="button" class="grid-item clearfix reviews-grid">
+  <div class="main action">
+    <div class="box">
+      <div data-verified-notification="data-verified-notification" data-testid="review-{{ block.id }}-title" class="block title">
+        {{ block.settings.author_name }}
+        {% if block.settings.verified %}
+          <span style="display: flex; align-items: center; gap: 4px" class="verified-badge-and-text">
+<svg xmlns="http://www.w3.org/2000/svg" style="width:1.2em;height:1.2em;vertical-align:middle;flex-shrink:0;" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="12" fill="#4caf50"/><path fill="#fff" d="M17.3 8.3l-6.6 6.6-3.3-3.3-1.4 1.4 4.7 4.7 8-8z"/>
+</svg>
+
+            <span style="font-style: normal; font-weight: 400; font-size: 12px; line-height: 18px; white-space: nowrap;">Verifiziert</span>
+          </span>
+        {% endif %}
+      </div>
+
+      <div class="clearfix"></div>
+
+      <div data-time="{{ block.settings.review_date | date: '%s' }}000" data-testid="review-{{ block.id }}-date" class="block time" data-upgraded="true">
+        {{ block.settings.review_date }}
+      </div>
+
+      <div aria-label="{{ block.settings.rating }} / 5 star review" data-testid="review-{{ block.id }}-stars" class="block stars">
+        <ul style="display: inline-flex; margin: unset; padding: unset; text-indent: unset; list-style-type: none; gap: 2px;">
+          {% for i in (1..5) %}
+            <li>
+              {% if i <= block.settings.rating %}
+                {% assign fill_state = 'full' %}
+              {% else %}
+                {% assign fill_state = 'empty' %}
+              {% endif %}
+<svg xmlns="http://www.w3.org/2000/svg" style="width:1.5em;height:1.5em;display:block;" viewBox="0 0 24 24">
+  {% if fill_state == 'full' %}
+    <path fill="#FFC107" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+  {% else %}
+    <path fill="#E0E0E0" d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24zm-10 6.02l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 3.89 4.38.38-3.32 2.88 1 4.28L12 15.26z"/>
+  {% endif %}
+</svg>
+
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="block">
+        <div class="pre-wrap main-text">{{ block.settings.review_text }}</div>
+      </div>
+
+      <div class="block">
+        <div class="metadata">
+          <div class="small text-muted">Produktart:</div>
+          <div class="value">{{ block.settings.product_variant }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+      </div>
+
+
+{% schema %}
+{
+  "blocks": [
+    {
+      "type": "product_review",
+      "name": "Product Review",
+      "settings": [
+        { "type": "text", "id": "author_name", "label": "Author Name", "default": "Uwe W." },
+        { "type": "checkbox", "id": "verified", "label": "Verified Purchase", "default": true },
+        { "type": "text", "id": "review_date", "label": "Review Date", "default": "1/9/2025" },
+        { "type": "range", "id": "rating", "label": "Rating", "default": 5, "min": 1, "max": 5, "step": 1 },
+        { "type": "textarea", "id": "review_text", "label": "Review Text", "default": "Sehr schöne Lampen!! Bin sehr zufrieden!!" },
+        { "type": "text", "id": "product_variant", "label": "Product Variant", "default": "Silber" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dynamic Product Reviews",
+      "blocks": [
+        { "type": "product_review" },
+        { "type": "product_review" },
+        { "type": "product_review" }
+      ]
+    }
+  ]
+}
+{% endschema %}

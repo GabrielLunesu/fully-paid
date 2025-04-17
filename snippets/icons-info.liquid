@@ -1,0 +1,62 @@
+{% comment %}
+  1) Drop this <style> block into your theme’s main CSS (or inside <head>)
+     *after* any other rules so it overrides them cleanly.
+{% endcomment %}
+<style>
+
+
+  /* each icon + text row */
+  .info-container {
+    margin-left: 30px !important;
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    gap: 0.5rem;         /* space between icon & text */
+    padding: 0.55rem 0;   /* vertical padding */
+    width: 100%;
+    max-width: 600px;     /* prevents it from stretching ridiculously wide */
+    margin: 0 auto;       /* centers it in the page */
+  }
+
+  /* the little SVG/PNG icon */
+  .info-container img {
+    width: 1.6rem;
+    height: auto;
+    flex-shrink: 0;
+  }
+
+  /* the headline text beside it */
+ .info-container h3 {
+    margin: 0;
+    font-size: 16px !important;      /* same on desktop */
+    font-weight: 550;     /* normal weight */
+    line-height: 1.2;
+    padding-top: 5px !important;
+    font-family: Arial, sans-serif;
+    color: #000;
+  }
+
+  /* mobile tweaks */
+  @media (max-width: 750px) {
+   .info-container {
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      max-width: none;
+    }
+    .product__info-container .info-container h3 {
+      font-size: 0.85rem;
+    }
+  }
+</style>
+
+  <section id="ProductInfo-{{ section.id }}" class="product__info-container">
+    {% case block.type %}
+      {% when 'icons-info' %}
+        <div class="info-container">
+          {% if block.settings.banner_image %}
+<img src="{{ block.settings.banner_image | image_url }}" alt="">
+          {% endif %}
+<h3>{{ block.settings.banner_title }}</h3>
+        </div>
+    {% endcase %}
+</section>

@@ -1,0 +1,15 @@
+{% for block in section.blocks %}
+  {% if block.type == 'zufriedene_kunden_banner' %}
+    <div class="product-info__block-item product-info__block-item--customer-satisfaction" data-block-type="liquid">
+      <div class="product-info__content">
+        <div class="zufriedene-kunden-banner">
+          <div class="overlap-images">
+            <img src="{{ block.settings.first_image | img_url: 'medium' }}" alt="Zufriedene Kunden 1" class="zufriedene-kunden-image">
+            <img src="{{ block.settings.second_image | img_url: 'medium' }}" alt="Zufriedene Kunden 2" class="zufriedene-kunden-image">
+          </div>
+          <span>{{ block.settings.banner_text | escape }}</span>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}

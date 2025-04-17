@@ -1,0 +1,110 @@
+{% schema %}
+{
+  "name": "Text with Icons",
+  "tag": "section",
+  "class": "shopify-section-group-footer-group shopify-section--text-with-icons",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "icon_block",
+      "name": "Icon Block",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Kostenloser Versand"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Kostenlose Lieferung nach Hause mit Track & Trace!"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_svg",
+          "label": "SVG Icon Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text with Icons Carousel",
+      "category": "Custom",
+      "blocks": [
+        {"type": "icon_block"},
+        {"type": "icon_block"},
+        {"type": "icon_block"}
+      ]
+    }
+  ]
+}
+{% endschema %}
+{% assign carousel_id = 'text-with-icons-carousel-' | append: section.id %}
+
+<section class="shopify-section shopify-section-group-footer-group shopify-section--text-with-icons">
+  <div class="section-spacing section-spacing--tight color-scheme color-scheme--scheme-1 color-scheme--bg-19a3b39d3ef7faefc005eabfd860ae8f bordered-section">
+    <div class="container">
+      <div class="v-stack gap-8">
+        <text-with-icons-carousel id="{{ carousel_id }}" disabled-on="sm" allow-swipe="" class="text-with-icons full-bleed sm:unbleed" role="region">
+          {% for block in section.blocks %}
+            <div class="text-with-icons__item{% if forloop.first %} is-selected{% endif %} snap-center"
+              role="group"
+              aria-label="Element {{ forloop.index }} von {{ section.blocks.size }}"
+              data-slide="{{ forloop.index0 }}">
+              <div class="v-stack gap-6 justify-items-center sm:justify-items-center">
+                <div style="--text-color: 48 48 48; color: rgb(var(--text-color)); --border-color: var(--text-color) / 0.15;">
+                  {% if block.settings.icon_svg != blank %}
+                    <img src="{{ block.settings.icon_svg | image_url }}" width="44" height="44" alt="Icon" class="sm:hidden">
+                    <img src="{{ block.settings.icon_svg | image_url }}" width="44" height="44" alt="Icon" class="hidden sm:block">
+                  {% endif %}
+                </div>
+                <div class="v-stack gap-2 text-center sm:text-center">
+                  <p class="h6 undericon"><strong>{{ block.settings.title }}</strong></p>
+                  <div class="prose">
+                    <p>{{ block.settings.description }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </text-with-icons-carousel>
+
+        <carousel-navigation aria-controls="{{ carousel_id }}" class="page-dots sm:hidden">
+          {% for block in section.blocks %}
+            <button
+              class="tap-area{% if forloop.first %} is-active{% endif %}"
+              data-slide="{{ forloop.index0 }}"
+              aria-current="{% if forloop.first %}true{% else %}false{% endif %}">
+              <span class="sr-only">Gehe zu Element {{ forloop.index }}</span>
+            </button>
+          {% endfor %}
+        </carousel-navigation>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const carouselId = '{{ carousel_id }}';
+      const carousel = document.getElementById(carouselId);
+      const slides = carousel.querySelectorAll('.text-with-icons__item');
+      const nav = carousel.parentElement.querySelector('carousel-navigation');
+      const buttons = nav.querySelectorAll('button');
+
+      buttons.forEach((btn, i) => {
+        btn.addEventListener('click', () => {
+          slides.forEach(slide => slide.classList.remove('is-selected'));
+          buttons.forEach(dot => dot.classList.remove('is-active'));
+          buttons.forEach(dot => dot.setAttribute('aria-current', 'false'));
+
+          slides[i].classList.add('is-selected');
+          btn.classList.add('is-active');
+          btn.setAttribute('aria-current', 'true');
+        });
+      });
+    });
+  </script>
+</section>

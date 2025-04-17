@@ -1,0 +1,112 @@
+    {{ 'square.css' | asset_url | stylesheet_tag }}
+<section class="square-carousel-section">
+  <div class="square-carousel-header">
+    <div class="square-carousel-text">
+      <h2>{{ section.settings.heading }}</h2>
+      <p>{{ section.settings.subheading }}</p>
+    </div>
+    {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+      <a href="{{ section.settings.button_link }}" class="square-carousel-button">
+        {{ section.settings.button_text }}
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="carousel-wrapper">
+    <button class="carousel-arrow left" onclick="scrollCarousel(this, 'left')">‹</button>
+    <div class="carousel-track" id="square-carousel-track">
+      {% assign collection = collections[section.settings.collection] %}
+      {% for product in collection.products limit: section.settings.products_limit %}
+        <div class="carousel-card">
+            <span class="product-badge sale">SALE</span>
+
+          {% if product.tags contains 'New' %}
+            <span class="product-badge">NIEUW</span>
+          {% endif %}
+          <a href="{{ product.url }}" class="carousel-image-link">
+            <img
+              src="{{ product.featured_image | image_url: width: 800 }}"
+              alt="{{ product.title }}"
+              loading="lazy"
+              class="carousel-image"
+            />
+          </a>
+          <div class="carousel-product-info">
+            <p class="carousel-title">{{ product.title }}</p>
+<p class="carousel-price">
+  {% if product.compare_at_price > product.price %}
+    <span class="original-price" style="text-decoration: line-through; color: #999;">
+      {{ product.compare_at_price | money }}
+    </span>
+    <span class="sale-price" style="color: #B08A53; font-weight: bold;">
+      {{ product.price | money }}
+    </span>
+  {% else %}
+    {{ product.price | money }}
+  {% endif %}
+</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-arrow right" onclick="scrollCarousel(this, 'right')">›</button>
+  </div>
+</section>
+
+<script>
+  function scrollCarousel(btn, direction) {
+    const container = btn.closest('.carousel-wrapper').querySelector('.carousel-track');
+    const scrollAmount = container.offsetWidth / 2;
+    container.scrollBy({
+      left: direction === 'right' ? scrollAmount : -scrollAmount,
+      behavior: 'smooth'
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Square Carousel Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "SHOP OUR SALE"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Shop our Spring Sale, perfect for elevating your wardrobe"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select Collection"
+    },
+    {
+      "type": "number",
+      "id": "products_limit",
+      "label": "Number of Products",
+      "default": 10
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Bekijk alles"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Square Carousel"
+    }
+  ]
+}
+{% endschema %}

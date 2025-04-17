@@ -1,0 +1,39 @@
+<p>RENDERED REVIEWS</p>
+{% assign limit = settings.reviews_to_show | plus: 0 %}
+<p>RENDERED REVIEWS</p>
+
+<div class="reviews-grid">
+  {% if review1_name %}
+    <div class="review-card">
+      <p><strong>{{ review1_name }}</strong>
+        <span class="verified-badge">✔ Verifiziert</span></p>
+      <p class="date">{{ review1_date }}</p>
+      <p class="stars">⭐⭐⭐⭐⭐</p>
+      <p class="review-text">{{ review1_text }}</p>
+      <p class="product"><strong>Produktart:</strong> {{ review1_product }}</p>
+    </div>
+  {% endif %}
+</div>
+
+
+  {% if limit >= 2 %}
+    <div class="review-card">
+      <p><strong>{{ settings.review2_name }}</strong>
+        <span class="verified-badge">✔ Verifiziert</span></p>
+      <p class="date">{{ settings.review2_date }}</p>
+      <p class="stars">⭐⭐⭐⭐⭐</p>
+      <p class="review-text">{{ settings.review2_text }}</p>
+      <p class="product"><strong>Produktart:</strong> {{ settings.review2_product }}</p>
+    </div>
+  {% endif %}
+
+  {% if limit >= 3 %}
+    <div class="review-card">
+      <p><strong>{{ settings.review3_name }}</strong>
+        <span class="verified-badge">✔ Verifiziert</span></p>
+      <p class="date">{{ settings.review3_date }}</p>
+      <p class="stars">⭐⭐⭐⭐⭐</p>
+      <p class="review-text">{{ settings.review3_text }}</p>
+      <p class="product"><strong>Produktart:</strong> {{ settings.review3_product }}</p>
+    </div>
+  {% endif %}

@@ -1,0 +1,113 @@
+{% schema %}
+{
+  "name": "BLOCKDYNAMIC",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_subheading",
+      "label": "Subheading",
+      "default": "Design-Lampen für Sie"
+    },
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "Heading",
+      "default": "Lampen"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="shopify-section shopify-section--featured-collections">
+  <style>
+    .shopify-section--featured-collections {
+      --product-list-items-per-row: 2;
+      --product-list-horizontal-spacing-factor: 0.2;
+      --product-list-vertical-spacing-factor: 0.2;
+    }
+
+    @media screen and (min-width: 700px) {
+      .shopify-section--featured-collections {
+        --product-list-items-per-row: 3;
+      }
+    }
+  </style>
+
+  <div class="section-spacing color-scheme color-scheme--scheme-4374d1c7-966f-4fb1-964b-1f9f43f27ef7 color-scheme--bg-71ee18f73bd3fa07d5ce49ee27dcc9ee">
+    <div class="container">
+      <div class="section-stack">
+        <div class="v-stack justify-self-center gap-4 text-center sm:gap-5">
+          <p class="h6 text-center">{{ section.settings.section_subheading }}</p>
+          <h2 class="h2">{{ section.settings.section_heading }}</h2>
+        </div>
+
+        {% if section.settings.collection != blank %}
+          <featured-collections-carousel class="featured-collections-carousel">
+            <div class="featured-collections-carousel__item is-selected">
+              <product-list class="product-list product-list--compact justify-center">
+                {% for product in collections[section.settings.collection].products %}
+                  <product-card class="product-card" handle="{{ product.handle }}">
+                    <div class="product-card__figure">
+                      <a href="{{ product.url }}" class="product-card__media" data-instant>
+                        <img
+                          src="{{ product.featured_image | image_url: width: 800 }}"
+                          alt="{{ product.featured_image.alt | escape }}"
+                          class="product-card__image product-card__image--primary aspect-square"
+                          width="800"
+                          height="800"
+                          loading="eager"
+                        >
+
+                        {% if product.images.size > 1 %}
+                          <img
+                            src="{{ product.images[1] | image_url: width: 800 }}"
+                            alt="{{ product.images[1].alt | escape }}"
+                            class="product-card__image product-card__image--secondary"
+                            loading="eager"
+                          >
+                        {% endif %}
+                      </a>
+
+                      {% if product.variants.size == 1 %}
+                        <form method="post" action="/cart/add" class="shopify-product-form" enctype="multipart/form-data" is="product-form">
+                          <input type="hidden" name="form_type" value="product">
+                          <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                          <input type="hidden" name="quantity" value="1">
+                          <button type="submit" class="product-card__quick-add-button">
+                            <span class="sr-only">In den Warenkorb</span>
+                            <svg aria-hidden="true" focusable="false" fill="none" width="12" class="icon icon-plus" viewBox="0 0 12 12">
+                              <path d="M6 0v12M0 6h12" stroke="currentColor" stroke-width="1.5"></path>
+                            </svg>
+                          </button>
+                        </form>
+                      {% else %}
+                        <button type="button" class="product-card__quick-add-button">
+                          <span class="sr-only">Optionen auswählen</span>
+                          <svg aria-hidden="true" focusable="false" fill="none" width="12" class="icon icon-plus" viewBox="0 0 12 12">
+                            <path d="M6 0v12M0 6h12" stroke="currentColor" stroke-width="1.5"></path>
+                          </svg>
+                        </button>
+                      {% endif %}
+                    </div>
+
+                    <div class="product-card__info empty:hidden"></div>
+                  </product-card>
+                {% endfor %}
+              </product-list>
+
+              <div class="justify-self-center">
+                <a class="button" href="{{ collections[section.settings.collection].url }}">Alle</a>
+              </div>
+            </div>
+          </featured-collections-carousel>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</section>

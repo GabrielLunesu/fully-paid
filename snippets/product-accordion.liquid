@@ -1,0 +1,77 @@
+<div class="product-info__block-group accordion-group" data-group-type="accordion-group">
+  {% for block in section.blocks %}
+    {% case block.type %}
+
+      {% when 'accordion_description' %}
+        <div class="product-info__block-item" data-block-type="description">
+          <details class="accordion group">
+            <summary>
+              <span class="accordion__toggle h6">
+                <span class="text-with-icon gap-4">{{ block.settings.heading }}</span>
+                <span class="animated-plus group-expanded:rotate" aria-hidden="true"></span>
+              </span>
+            </summary>
+            <div class="accordion__content prose">
+              <div class="row justify-content-center">
+                <div class="col-11 text-center py-2 py-lg-4">
+                  <table style="font-size: 0.875rem; margin: auto;" width="100%">
+                    <tbody>
+                      <tr>
+                        <td style="text-align: center;">
+                          <strong><em><span style="color: #ff2a00;">Update:&nbsp;</span>{{ block.settings.announcement }}</em></strong>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="row justify-content-center">
+                <div class="col-11 col-lg-10 py-5">
+                  <h2><strong>{{ product.title }}</strong></h2>
+                  <p>{{ product.description }}</p>
+                </div>
+              </div>
+
+              <div class="row justify-content-center">
+                <div class="text-center">
+                  <img src="{{ block.settings.footer_image | img_url: 'master' }}" alt="Footer" width="515" height="322" />
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+
+      {% when 'accordion_shipping' %}
+        <div class="product-info__block-item" data-block-type="accordion">
+          <details class="accordion group" open>
+            <summary>
+              <span class="accordion__toggle h6">
+                <span>{{ block.settings.heading }}</span>
+                <span class="animated-plus group-expanded:rotate" aria-hidden="true"></span>
+              </span>
+            </summary>
+            <div class="accordion__content prose">
+              <p>{{ block.settings.content }}</p>
+            </div>
+          </details>
+        </div>
+
+      {% when 'accordion_guarantee' %}
+        <div class="product-info__block-item" data-block-type="accordion">
+          <details class="accordion group" open>
+            <summary>
+              <span class="accordion__toggle h6">
+                <span>{{ block.settings.heading }}</span>
+                <span class="animated-plus group-expanded:rotate" aria-hidden="true"></span>
+              </span>
+            </summary>
+            <div class="accordion__content prose">
+              <p>{{ block.settings.content }}</p>
+            </div>
+          </details>
+        </div>
+
+    {% endcase %}
+  {% endfor %}
+</div>

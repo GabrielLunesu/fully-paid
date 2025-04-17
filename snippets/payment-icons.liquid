@@ -1,0 +1,41 @@
+<div class="payment-icons">
+    <svg class="payment-icon" xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 38 24" width="38" height="24" aria-labelledby="pi-ideal">
+      <title id="pi-ideal">iDEAL</title>
+      <!-- Add iDEAL SVG code here -->
+    </svg>
+
+  {% if settings.show_klarna %}
+    <svg class="payment-icon" xmlns="http://www.w3.org/2000/svg" role="img" width="38" height="24" viewBox="0 0 38 24" aria-labelledby="pi-klarna">
+      <title id="pi-klarna">Klarna</title>
+      <!-- Add Klarna SVG code here -->
+    </svg>
+  {% endif %}
+
+  {% if settings.show_apple_pay %}
+    <svg class="payment-icon" xmlns="http://www.w3.org/2000/svg" role="img" x="0" y="0" width="38" height="24" viewBox="0 0 165.521 105.965" xml:space="preserve" aria-labelledby="pi-apple_pay">
+      <title id="pi-apple_pay">Apple Pay</title>
+      <!-- Add Apple Pay SVG code here -->
+    </svg>
+  {% endif %}
+
+  {% if settings.show_paypal %}
+    <svg class="payment-icon" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" width="38" height="24" role="img" aria-labelledby="pi-paypal">
+      <title id="pi-paypal">PayPal</title>
+      <!-- Add PayPal SVG code here -->
+    </svg>
+  {% endif %}
+
+  {% if settings.show_mastercard %}
+    <svg class="payment-icon" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" role="img" width="38" height="24" aria-labelledby="pi-master">
+      <title id="pi-master">Mastercard</title>
+      <!-- Add Mastercard SVG code here -->
+    </svg>
+  {% endif %}
+
+  {% if settings.show_visa %}
+    <svg class="payment-icon" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" role="img" width="38" height="24" aria-labelledby="pi-visa">
+      <title id="pi-visa">Visa</title>
+      <!-- Add Visa SVG code here -->
+    </svg>
+  {% endif %}
+</div>

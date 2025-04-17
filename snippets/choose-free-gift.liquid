@@ -1,0 +1,90 @@
+{% if block.settings.title != blank %}
+  <h3 class="choose-gift-title">{{ block.settings.title }}</h3>
+{% endif %}
+
+<div class="choose-gift-grid">
+  {% for i in (1..3) %}
+    {% assign gift_key = 'gift_' | append: i %}
+    {% assign product = block.settings[gift_key] %}
+    {% if product != blank %}
+      <label class="gift-card {% if forloop.index == 1 %}selected{% endif %}">
+        <input type="radio" name="gift_option" value="{{ product.variants.first.id }}" {% if forloop.index == 1 %}checked{% endif %} style="display: none;">
+        <div class="gift-card-inner">
+          <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
+          <div class="gift-title">{{ product.title }}</div>
+        </div>
+      </label>
+    {% endif %}
+  {% endfor %}
+</div>
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Select styling for the first selected gift
+    const radioButtons = document.querySelectorAll('input[name="gift_option"]');
+    const giftCards = document.querySelectorAll('.gift-card');
+
+    // Ensure the first radio button is visually selected
+    radioButtons[0].checked = true;
+
+    // Styling for the selected gift card
+    giftCards.forEach(card => {
+      card.addEventListener('click', function () {
+        giftCards.forEach(c => c.classList.remove('selected'));
+        this.classList.add('selected');
+      });
+    });
+  });
+  document.addEventListener('DOMContentLoaded', function () {
+    const buyForms = document.querySelectorAll('form[action^="/cart/add"]');
+
+    // Select styling
+    document.querySelectorAll('.gift-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.gift-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        card.querySelector('input[type="radio"]').checked = true;
+      });
+    });
+
+    buyForms.forEach(form => {
+      form.addEventListener('submit', function (e) {
+        const selectedGift = document.querySelector('input[name="gift_option"]:checked');
+        if (!selectedGift) return;
+
+        e.preventDefault();
+        const giftId = selectedGift.value;
+        const formData = new FormData(form);
+        const mainId = formData.get('id');
+        const quantity = parseInt(formData.get('quantity')) || 1;
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            items: [
+              {
+                id: giftId,
+                quantity: 1,
+                properties: { "Free Gift": "true" }
+              },
+              {
+                id: mainId,
+                quantity: quantity
+              }
+            ]
+          })
+        })
+        .then(() => {
+          document.dispatchEvent(new CustomEvent('cart:refresh'));
+        })
+        .catch(err => {
+          console.error('Error adding gift and product:', err);
+          form.submit();
+        });
+      });
+    });
+  });
+</script>
