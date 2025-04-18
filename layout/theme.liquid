@@ -178,7 +178,7 @@
                 /* Overlay used for modal */
                 --page-overlay: 0 0 0 / 0.4;
                 /* We use the first scheme background as default */
-                --page-background: ;
+                --page-background: 255 255 255;
                 /* Product colors */
                 --on-sale-text: 223 204 103;
                 --on-sale-badge-background: 223 204 103;
@@ -195,15 +195,16 @@
                 --warning-text: 237 138 0;
                 --error-background: 243 204 204;
                 --error-text: 203 43 43;
+                /* Base colors */
+                --color-background-base: 255 255 255;  /* White background */
             }
 
             .color-scheme--scheme-1 {
                 /* Color settings */
                 --accent: 223 204 103;
                 --text-color: 48 48 48;
-                /* --background: 233 233 233 / 1.0; */
-                --background: #ffff;
-                --background-without-opacity: #ff;
+                --background: 255 255 255 / 1.0;
+                --background-without-opacity: 255 255 255;
                 --background-gradient: ;
                 --border-color: 205 205 205;
                 /* Button colors */
@@ -376,7 +377,7 @@
   }
 
   body {
-      background-color: #ffffff !important;
+    background-color: rgb(var(--color-background-base)) !important;
     display: grid;
     grid-template-rows: auto auto 1fr auto;
     grid-template-columns: 100%;
@@ -388,6 +389,28 @@
     font-family: var(--font-body-family);
     font-style: var(--font-body-style);
     font-weight: var(--font-body-weight);
+  }
+
+  .white-background {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+  }
+
+  /* Override the gradient class to ensure white background */
+  .gradient {
+    background: rgb(255, 255, 255) !important;
+    background-attachment: fixed;
+  }
+
+  /* Ensure product pages have white background */
+  body, 
+  main#MainContent,
+  .section-template--main-product,
+  .product__info-wrapper,
+  .product__media-wrapper,
+  .color-scheme--scheme-1,
+  .color-scheme--scheme-2 {
+    background-color: rgb(255, 255, 255) !important;
   }
 
   @media screen and (min-width: 750px) {
@@ -402,6 +425,77 @@
     {{ 'theme.css' | asset_url | stylesheet_tag }}
     {{ 'carousel.css' | asset_url | stylesheet_tag }}
     {{ 'animations.css' | asset_url | stylesheet_tag }}
+    {{ 'product-white-background.css' | asset_url | stylesheet_tag }}
+    
+    <!-- Force white backgrounds on header and body -->
+    <style>
+      html, body {
+        background-color: #ffffff !important;
+      }
+      
+      /* Make announcement bar black */
+      .announcement-bar-section,
+      .announcement-bar,
+      .scrolling_marquee_4P68U8,
+      .scrolling-marquee {
+        background-color: #1c1c1c !important;
+        color: #ffffff !important;
+      }
+      
+      /* Override any potential gray backgrounds in the header and navigation */
+      header, 
+      .header, 
+      .header-wrapper,
+      nav,
+      .nav,
+      .navigation,
+      .utility-bar {
+        background-color: #ffffff !important;
+      }
+      
+      /* Set container to have white background */
+      .page-width,
+      .grid,
+      .grid__item,
+      .template-product main,
+      .product,
+      .product__info-wrapper {
+        background-color: #ffffff !important;
+      }
+      
+      /* Make absolutely sure the sides of the pages aren't gray */
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 100vw;
+        background-color: #ffffff !important;
+        z-index: -1;
+      }
+      body::before {
+        left: -100vw;
+      }
+      body::after {
+        right: -100vw;
+      }
+      
+      /* Target the sticky Add to Cart bar */
+      .product-sticky-bar,
+      .product_sticky_bar_W78cbf,
+      #shopify-section-product_sticky_bar_W78cbf,
+      [class*="product_sticky_bar"],
+      [class*="product-sticky-bar"],
+      [id*="product_sticky_bar"],
+      [id*="product-sticky-bar"] {
+        background-color: #ffffff !important;
+        background: #ffffff !important;
+        border-top: 1px solid #eeeeee;
+        border-bottom: 1px solid #eeeeee;
+      }
+    </style>
+    
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
@@ -444,7 +538,7 @@
     </script>
   </head>
 
-  <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
+  <body class="white-background{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
       {{ 'accessibility.skip_to_text' | t }}
     </a>

@@ -1,0 +1,109 @@
+/* Force white background on product pages */
+body, 
+html,
+main#MainContent,
+.template-product,
+.shopify-section:not(.shopify-section-announcement-bar):not(.shopify-section-scrolling-marquee),
+.product, 
+.product__info-wrapper,
+.product__media-wrapper,
+.color-scheme--scheme-1, 
+.color-scheme--scheme-2,
+.gradient,
+.product-section,
+.section-template--main-product,
+/* Header elements */
+.header,
+.header-wrapper,
+/* Full page elements */
+.page-width,
+.content-for-layout,
+#shopify-section-template--main-product,
+.main-product,
+/* Container elements that might have background color */
+.color-background-1,
+.isolate,
+.product-section-wrapper {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+/* Make announcement bar black */
+.announcement-bar-section,
+.announcement-bar,
+.scrolling_marquee_4P68U8,
+.scrolling-marquee,
+.shopify-section-announcement-bar,
+.shopify-section-scrolling-marquee {
+  background-color: #1c1c1c !important;
+  color: #ffffff !important;
+}
+
+/* Target product page elements */
+.template-product *:not(.announcement-bar-section *):not(.announcement-bar *):not(.scrolling_marquee_4P68U8 *):not(.scrolling-marquee *) {
+  background-color: #ffffff !important;
+}
+
+/* Ensure RGB format is also white */
+.color-scheme--scheme-1,
+.color-scheme--scheme-2,
+:root {
+  --background: 255 255 255 / 1.0 !important;
+  --background-without-opacity: 255 255 255 !important;
+  --color-background: 255 255 255 !important;
+  --color-background-base: 255 255 255 !important;
+}
+
+/* Override any gradient elements */
+.gradient {
+  background: #ffffff !important;
+  background-attachment: fixed !important;
+}
+
+/* Force the body to have a white background that extends to the edges */
+body {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  min-width: 100%;
+  max-width: 100%;
+}
+
+/* Target the sticky Add to Cart bar */
+.product-sticky-bar,
+.product_sticky_bar_W78cbf,
+#shopify-section-product_sticky_bar_W78cbf,
+.shopify-section-product-sticky-bar,
+.product-sticky-bar__content,
+div[class*="product_sticky_bar"],
+div[class*="product-sticky-bar"],
+div[id*="product_sticky_bar"],
+div[id*="product-sticky-bar"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-top: 1px solid #eeeeee !important;
+  border-bottom: 1px solid #eeeeee !important;
+}
+
+/* Target the sticky bar elements recursively */
+div[class*="product_sticky_bar"] *,
+div[class*="product-sticky-bar"] *,
+div[id*="product_sticky_bar"] *,
+div[id*="product-sticky-bar"] *,
+.product-sticky-bar *,
+#shopify-section-product_sticky_bar_W78cbf *,
+.shopify-section-product-sticky-bar * {
+  background-color: #ffffff !important;
+}
+
+/* Specifically target any scheme-2 or other colored background that might be applied to the sticky bar */
+div[class*="product_sticky_bar"] .color-scheme--scheme-2,
+div[class*="product-sticky-bar"] .color-scheme--scheme-2,
+div[id*="product_sticky_bar"] .color-scheme--scheme-2,
+div[id*="product-sticky-bar"] .color-scheme--scheme-2,
+.product-sticky-bar .color-scheme--scheme-2,
+#shopify-section-product_sticky_bar_W78cbf .color-scheme--scheme-2,
+.shopify-section-product-sticky-bar .color-scheme--scheme-2 {
+  background-color: #ffffff !important;
+  --background: 255 255 255 / 1.0 !important;
+  --background-without-opacity: 255 255 255 !important;
+} 
