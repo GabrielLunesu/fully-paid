@@ -131,6 +131,20 @@ span.cstm-discount-percentage.tt { /* Added your custom class */
   vertical-align: middle; /* Align with text */
 }
 
+/* Price Alignment */
+.price {
+  display: flex !important; /* Use flexbox for alignment */
+  align-items: baseline !important; /* Align items along their text baseline */
+  flex-wrap: wrap; /* Allow wrapping if needed */
+  gap: 0.5rem; /* Add a small gap between price elements */
+}
+
+/* Ensure individual price items and badge align correctly */
+.price .price-item,
+.price span.cstm-discount-percentage.tt {
+  margin-bottom: 0; /* Remove any default bottom margin that might interfere */
+}
+
 /* --- Layout Adjustments --- */
 
 /* Benefits Section Styling ("Pills") */
