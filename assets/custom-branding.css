@@ -1,0 +1,198 @@
+/* Custom Branding Colors */
+:root {
+  /* Define Brand Colors */
+  --color-brand-desert-sand: #E7D8C9;
+  --color-brand-olive-clay: #A68C6D;
+  --color-brand-terracotta: #D18F6F;
+  --color-brand-charcoal-black: #2C2C2C;
+  --color-brand-ivory-white: #F9F7F1;
+  --color-brand-gold-dust: #D4B07A; /* Luxe accent (subtle) */
+
+  /* Override Shopify Base Colors */
+  /* Background */
+  --color-background: 231, 216, 201; /* #E7D8C9 Desert Sand (Needs RGB format for use with rgba()) */
+  --color-background-rgb: 231, 216, 201;
+  --color-secondary-background: 249, 247, 241; /* #F9F7F1 Ivory White */
+  --color-secondary-background-rgb: 249, 247, 241;
+
+  /* Text */
+  --color-foreground: 44, 44, 44; /* #2C2C2C Charcoal Black */
+  --color-foreground-rgb: 44, 44, 44;
+  --color-link: var(--color-brand-olive-clay); /* Use Olive Clay for links */
+
+  /* Buttons & Accents */
+  --color-button: 166, 140, 109; /* #A68C6D Olive Clay */
+  --color-button-rgb: 166, 140, 109;
+  --color-button-text: 249, 247, 241; /* #F9F7F1 Ivory White for button text */
+  --color-button-text-rgb: 249, 247, 241;
+
+  /* Secondary/Tertiary Buttons (Example - adjust as needed) */
+  --color-secondary-button: 209, 143, 111; /* #D18F6F Terracotta */
+  --color-secondary-button-rgb: 209, 143, 111;
+  --color-secondary-button-text: 249, 247, 241; /* #F9F7F1 Ivory White */
+  --color-secondary-button-text-rgb: 249, 247, 241;
+
+  /* Accents (Example - adjust which Shopify vars map to these) */
+  --color-accent-1: var(--color-brand-olive-clay); /* Olive Clay */
+  --color-accent-2: var(--color-brand-terracotta); /* Terracotta */
+  --color-accent-3: var(--color-brand-gold-dust); /* Gold Dust (Subtle) */
+
+
+  /* Inputs (Example - using Charcoal on Ivory) */
+  --color-inputs-background: var(--color-brand-ivory-white);
+  --color-inputs-text: var(--color-brand-charcoal-black);
+  --color-inputs-border: var(--color-brand-charcoal-black);
+  --inputs-border-opacity: 0.5; /* Example opacity */
+
+  /* Add more overrides as needed based on theme structure */
+
+}
+
+/* Specific Overrides for Cleanliness & Branding */
+
+/* Ensure ATC button uses branding */
+.product-form__submit.button--primary {
+  background-color: var(--color-brand-olive-clay) !important; /* Button background: Olive Clay */
+  color: var(--color-brand-ivory-white) !important; /* Button text: Ivory White */
+  border: 1px solid var(--color-brand-olive-clay) !important; /* Optional: ensure border matches */
+}
+.product-form__submit.button--primary:hover {
+  background-color: var(--color-brand-terracotta) !important; /* CTA hover: Terracotta */
+  border-color: var(--color-brand-terracotta) !important;
+  color: var(--color-brand-ivory-white) !important;
+}
+
+
+/* Price Centering & Styling - Attempt 4 (Target Specific Classes) */
+
+/* Center the container */
+.product__info-container .price,
+.price__container,
+.price__regular > .v-stack > .price-list,
+.price__sale {
+  text-align: left;
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+/* Style compare-at (original) price */
+.price compare-at-price,
+.price s.price-item--regular { /* Target both possibilities */
+  display: inline-block !important;
+  vertical-align: baseline;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+  text-decoration: line-through;
+  font-size: 1.2rem !important; /* Reduced size */
+  opacity: 0.7;
+}
+
+/* Style sale price */
+.price sale-price, /* Target element */
+.price span.price-item.price-item--sale { /* Target specific span class from screenshot */
+  display: inline-block !important;
+  vertical-align: baseline;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+  text-decoration: none;
+  font-size: 1.2rem !important; /* Reduced size */
+  font-weight: bold; /* Optional: make sale price bolder */
+  color: var(--color-brand-gold-dust); /* Use Gold Dust for Sale price */
+}
+
+/* Style the savings badge */
+.price span.cstm-discount-percentage.tt { /* Target specific span class from screenshot */
+  display: inline-block !important;
+  vertical-align: baseline;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+  background-color: var(--color-brand-terracotta) !important;
+  color: var(--color-brand-ivory-white) !important;
+  padding: 0.15em 0.4em;
+  border-radius: var(--border-radius);
+  font-size: 1.1rem !important; /* Unified font size */
+  line-height: 1;
+}
+
+/* Hide the default sale badge if we're using the custom savings text */
+.price--on-sale .price__badge-sale {
+  display: none !important; /* Hide default badge since we have the savings text */
+}
+
+/* Discount Badge Styling (Example) - Keeping for potential other uses */
+.price__badge-sale,
+span.cstm-discount-percentage.tt { /* Added your custom class */
+  background-color: var(--color-brand-terracotta) !important; /* Terracotta for discount */
+  color: var(--color-brand-ivory-white) !important;
+  padding: 0.2em 0.6em;
+  border-radius: var(--border-radius); /* Use theme's border radius */
+  font-size: 1.1rem;
+  margin-left: 0.5rem; /* Add some space */
+  display: inline-block; /* Ensure it stays inline */
+  vertical-align: middle; /* Align with text */
+}
+
+/* --- Layout Adjustments --- */
+
+/* Free Products Section (Placeholder - Need specific selectors) */
+/* Identify the selector for the "free products" section container and items */
+/* Example: */
+/*
+.free-products-section .product-item {
+  max-width: 150px; // Adjust size as needed
+}
+.free-products-section .grid {
+  gap: 1rem; // Adjust spacing
+}
+*/
+
+/* Benefits Section Styling (Placeholder - Need specific selectors) */
+/* Identify the container and item selectors for the benefits */
+/* Example: Assuming a structure like .benefits-section .benefit-item */
+/*
+.benefits-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); // Responsive columns
+  gap: 2rem; // Space between items
+}
+
+.benefit-item {
+  border: 1px solid rgba(var(--color-foreground-rgb), 0.1); // Subtle border
+  padding: 1.5rem;
+  text-align: center;
+  background-color: var(--color-secondary-background); // Use Ivory White background
+  border-radius: var(--border-radius);
+  display: flex; // Use flexbox for vertical alignment
+  flex-direction: column;
+  justify-content: space-between; // Push content apart if needed
+  min-height: 250px; // Example fixed height - adjust as needed
+}
+
+.benefit-item .icon { // Style icons if they exist
+  color: var(--color-brand-terracotta); // Terracotta for icons
+  margin-bottom: 1rem;
+}
+
+.benefit-item h3 { // Style headings
+  margin-bottom: 0.5rem;
+}
+*/
+
+/* Add any other specific overrides needed for a clean look */
+body {
+ background-color: var(--color-brand-desert-sand);
+ color: var(--color-brand-charcoal-black);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-brand-charcoal-black); /* Ensure headings use Charcoal */
+}
+
+/* Style links globally if needed */
+a {
+ color: var(--color-brand-olive-clay);
+ text-decoration: none; /* Optional: remove underlines */
+}
+a:hover {
+ color: var(--color-brand-terracotta);
+ text-decoration: underline; /* Optional: underline on hover */
+} 
