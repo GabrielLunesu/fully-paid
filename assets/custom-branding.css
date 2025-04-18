@@ -135,7 +135,7 @@ span.cstm-discount-percentage.tt { /* Added your custom class */
 .price {
   display: flex !important; /* Use flexbox for alignment */
   align-items: baseline !important; /* Align items along their text baseline */
-  flex-wrap: wrap; /* Allow wrapping if needed */
+  flex-wrap: nowrap !important; /* Prevent wrapping onto multiple lines */
   gap: 0.5rem; /* Add a small gap between price elements */
 }
 
@@ -195,15 +195,25 @@ span.cstm-discount-percentage.tt { /* Added your custom class */
   position: relative;
   box-sizing: border-box;
   box-shadow: 0 4px 12px rgba(var(--color-brand-charcoal-black-rgb, 44, 44, 44), 0.08);
+  text-align: center !important; /* Center all content within the wrapper */
 }
 
 .choose-gift-title {
-  text-align: center;
+  text-align: center !important; /* Force center alignment */
   margin-bottom: 1.5rem; /* Space below title */
   margin-top: 0;
   font-size: 1.2rem;
-  font-weight: 550;
+  font-weight: 700 !important; /* Force font weight */
   color: var(--color-brand-charcoal-black) !important;
+}
+
+.choose-gift-subtitle {
+  text-align: center !important; /* Force center alignment */
+  margin-top: -0.5rem; /* Reduced negative margin for slightly more space */
+  margin-bottom: 2rem; /* Increased space below subtitle */
+  font-size: 1rem; /* Slightly smaller than title */
+  font-weight: normal !important; /* Force normal weight */
+  color: var(--color-brand-charcoal-black) !important; /* Force color */
 }
 
 .choose-gift-grid {
@@ -275,7 +285,8 @@ span.cstm-discount-percentage.tt { /* Added your custom class */
   }
 
   .choose-gift-grid {
-    grid-template-columns: repeat(3, 1fr);
+    display: grid !important; /* Ensure grid display */
+    grid-template-columns: repeat(3, 1fr) !important; /* Force 3 columns */
     gap: 0.75rem;
   }
 
@@ -299,6 +310,27 @@ span.cstm-discount-percentage.tt { /* Added your custom class */
   .choose-gift-title {
     font-size: 1.1rem;
     margin-bottom: 1rem;
+  }
+
+  /* Adjust price sizes and gap on mobile */
+  .price {
+    gap: 0.3rem; /* Reduce gap on mobile */
+  }
+
+  .price compare-at-price,
+  .price s.price-item--regular,
+  .price sale-price,
+  .price span.price-item.price-item--sale {
+    font-size: 1rem !important; /* Smaller font size for prices on mobile */
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+  }
+
+  .price span.cstm-discount-percentage.tt {
+    font-size: 0.9rem !important; /* Smaller font size for badge on mobile */
+    padding: 0.1em 0.3em;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
   }
 }
 
