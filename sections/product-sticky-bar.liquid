@@ -50,21 +50,26 @@
 
 <style>
   .product-sticky-bar {
-    display: none;
+    display: block;
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 99;
-    background: white;
     padding: 1rem;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(100%);
+    transition: transform 0.4s ease-out;
   }
 
   .product-sticky-bar.is-visible {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 749px) {
+    /* Mobile specific overrides if any */
   }
 </style>
 
@@ -96,35 +101,79 @@ document.addEventListener("DOMContentLoaded", function () {
       const discountEl = document.getElementById("sticky-product-discount");
       const imageEl = document.getElementById("sticky-product-image");
 
+      if (!priceEl || !compareEl || !discountEl || !imageEl) {
+        console.warn("Sticky bar elements not found for update.");
+        return;
+      }
+
       const price = variant.price / 100;
       const compare = variant.compare_at_price / 100;
 
       priceEl.textContent = `€${price.toFixed(2)}`;
 
+      const compareParentElement = compareEl.closest('.h6');
+
       if (compare > price) {
         compareEl.textContent = `€${compare.toFixed(2)}`;
         discountEl.textContent = `-${Math.round(((compare - price) / compare) * 100)}%`;
-        compareEl?.parentElement?.style?.setProperty("display", "inline");
-        discountEl?.style?.setProperty("display", "inline");
+        if (compareParentElement) compareParentElement.style.display = 'inline';
+        if (compareEl) compareEl.style.display = 'inline';
+        if (discountEl) discountEl.style.display = 'inline-block';
       } else {
-        compareEl?.parentElement?.style?.setProperty("display", "none");
-        discountEl?.style?.setProperty("display", "none");
+        if (compareParentElement) compareParentElement.style.display = 'none';
+        if (compareEl) compareEl.style.display = 'none';
+        if (discountEl) discountEl.style.display = 'none';
       }
 
       if (variant.featured_image && imageEl) {
-        imageEl.src = variant.featured_image.src;
-        imageEl.srcset = `${variant.featured_image.src} 60w, ${variant.featured_image.src} 120w, ${variant.featured_image.src} 180w`;
+        let baseSrc = variant.featured_image.src;
+        const versionParam = baseSrc.includes('?') ? baseSrc.substring(baseSrc.indexOf('?')) : '';
+        let cleanBaseSrc = baseSrc.split('?')[0];
+
+        cleanBaseSrc = cleanBaseSrc.replace(/_(pico|icon|thumb|small|compact|medium|large|grande|original|\d{1,4}x\d{0,4}|x\d{1,4})\.(jpg|jpeg|png|gif|webp)/i, '.$2');
+
+        const generateSizedUrl = (width) => {
+          const widthParam = `width=${width}`;
+          if (versionParam) {
+            return `${cleanBaseSrc}${versionParam}&${widthParam}`;
+          } else {
+            return `${cleanBaseSrc}?${widthParam}`;
+          }
+        };
+
+        imageEl.src = generateSizedUrl(60);
+        imageEl.srcset = `${generateSizedUrl(60)} 60w, ${generateSizedUrl(120)} 120w, ${generateSizedUrl(180)} 180w`;
+        imageEl.width = 60;
+        imageEl.height = 60;
       }
     }
 
     if (sticky) {
-      window.addEventListener('scroll', () => {
-        if (window.scrollY > 500) {
-          sticky.classList.add('is-visible');
+      const mobileMediaQuery = window.matchMedia("(max-width: 749px)");
+
+      function handleVisibility() {
+        if (mobileMediaQuery.matches) {
+          setTimeout(() => {
+             if (sticky) sticky.classList.add('is-visible');
+          }, 100);
         } else {
-          sticky.classList.remove('is-visible');
+          if (window.scrollY > 500) {
+             if (sticky) sticky.classList.add('is-visible');
+          } else {
+             if (sticky) sticky.classList.remove('is-visible');
+          }
+        }
+      }
+
+      handleVisibility();
+
+      window.addEventListener('scroll', () => {
+        if (!mobileMediaQuery.matches) {
+           handleVisibility();
         }
       });
+
+      mobileMediaQuery.addEventListener('change', handleVisibility);
     }
 
     document.addEventListener("variant:change", function (event) {
