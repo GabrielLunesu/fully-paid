@@ -323,3 +323,47 @@ a:hover {
 div[class*="product_sticky_bar"] *, div[class*="product-sticky-bar"] *, div[id*="product_sticky_bar"] *, div[id*="product-sticky-bar"] *, .product-sticky-bar *, #shopify-section-product_sticky_bar_W78cbf *, .shopify-section-product-sticky-bar * {
   background-color: #ffffff00 !important;
 }
+
+.square-carousel-text {
+  color: var(--color-brand-charcoal-black) !important;
+  padding: 1rem !important;
+}
+
+.square-carousel-text a {
+  color: var(--color-brand-charcoal-black) !important;
+}
+
+/* Accordion Animations - Simplified */
+details.accordion.group > .accordion__content {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0 !important; 
+  padding-bottom: 0 !important;
+  /* Define transition only on the base state */
+  transition: 
+    max-height 0.5s cubic-bezier(0.23, 1, 0.32, 1), 
+    opacity 0.4s ease,
+    padding-top 0.5s ease, 
+    padding-bottom 0.5s ease;
+  /* Remove visibility */
+}
+
+/* Content area - open state */
+details.accordion.group[open] > .accordion__content {
+  max-height: 500px; /* Adjust if content can be taller */
+  opacity: 1;
+  padding-top: 1em !important; /* Restore top padding */
+  padding-bottom: 1em !important; /* Restore bottom padding */
+  /* Remove transition from the open state */
+}
+
+/* Summary icon transition */
+details.accordion.group summary .animated-plus {
+  transition: transform 0.3s ease;
+}
+
+/* The theme seems to handle rotation via group-expanded:rotate utility */
+/* details.accordion[open] summary .animated-plus {
+  transform: rotate(45deg);
+} */
