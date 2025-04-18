@@ -367,3 +367,14 @@ details.accordion.group summary .animated-plus {
 /* details.accordion[open] summary .animated-plus {
   transform: rotate(45deg);
 } */
+
+/* Cart Counter Bubble Mobile Fix */
+@media screen and (max-width: 749px) {
+  .cart-count-bubble {
+    bottom: 1.2rem;
+    left: 1.2rem;
+    height: 1.5rem;
+    width: 1.5rem;
+    font-size: 0.8rem;
+  }
+}
