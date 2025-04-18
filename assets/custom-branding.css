@@ -378,3 +378,114 @@ details.accordion.group summary .animated-plus {
     font-size: 0.8rem;
   }
 }
+
+/* Announcement Marquee Styling (Aligned with ATC Button Base) */
+.announcement-marquee {
+  margin-top: -5px !important;
+  background-color: var(--color-brand-olive-clay) !important; /* Match ATC background */
+  color: var(--color-brand-ivory-white) !important; /* Match ATC text */
+  padding: 0.8rem 0; /* Add some vertical padding */
+  overflow: hidden; /* Ensure content stays within */
+  border-top: none !important; /* Remove top border */
+  border-bottom: none !important; /* Also remove potential bottom border */
+}
+
+.announcement-marquee__content {
+  color: var(--color-brand-ivory-white) !important;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  display: inline-block; /* Needed for marquee effect */
+  white-space: nowrap; /* Keep text on one line for marquee */
+  /* Animation will likely be handled by theme JS or other CSS, focus on base styles */
+}
+
+.announcement-marquee__content a {
+  color: var(--color-brand-terracotta) !important; /* Link color: Terracotta */
+  text-decoration: none;
+  transition: color 0.3s ease;
+  padding: 0 0.5em; /* Add padding around links */
+}
+
+.announcement-marquee__content a:hover {
+  color: var(--color-brand-gold-dust) !important; /* Link hover: Gold Dust */
+  text-decoration: underline;
+}
+
+/* Announcement Bar Styling (Aligned with Marquee & ATC Button Base) */
+.announcement-bar {
+  font-weight: 800 !important;
+  background-color: var(--color-brand-olive-clay) !important; /* Match ATC background */
+  color: var(--color-brand-ivory-white) !important; /* Match ATC text */
+  padding: 0.8rem 0; /* Consistent padding */
+  border-top: none !important; /* Remove top border */
+  border-bottom: none !important; /* Remove bottom border */
+}
+
+/* Assuming .announcement-bar__message holds the text, adjust if needed */
+.announcement-bar__message {
+  color: var(--color-brand-ivory-white) !important;
+  font-size: 0.9rem;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em;
+  text-align: center; /* Center text in standard bar */
+}
+
+.announcement-bar__message a {
+  color: var(--color-brand-terracotta) !important; /* Link color: Terracotta */
+  text-decoration: none;
+  transition: color 0.3s ease;
+  padding: 0 0.3em; /* Slight padding for links */
+}
+
+.announcement-bar__message a:hover {
+  color: var(--color-brand-gold-dust) !important; /* Link hover: Gold Dust */
+  text-decoration: underline;
+}
+
+/* Announcement Bar Controls Styling (Refined) */
+.utility-bar + .header-wrapper + .announcement-bar .slider-button, /* Increased specificity */
+.announcement-bar .slider-button {
+  background: none !important; /* Use background: none */
+  background-color: transparent !important;
+  border: none !important; /* Ensure no border */
+  color: var(--color-brand-ivory-white) !important;
+}
+
+.announcement-bar .slider-button svg {
+  color: var(--color-brand-ivory-white) !important; /* Target SVG color directly */
+  fill: currentColor; /* Ensure fill uses the color */
+}
+
+.announcement-bar .slider-button:hover {
+  background-color: rgba(var(--color-brand-ivory-white-rgb, 249, 247, 241), 0.1) !important; /* Subtle hover */
+  color: var(--color-brand-ivory-white) !important;
+}
+
+/* Remove Header Bottom Border & Shadow */
+.header-wrapper {
+  border-bottom: none !important;
+  box-shadow: none !important; /* Remove potential shadow */
+}
+
+/* Hide Announcement Bar Controls */
+/* Commenting out the container rule */
+/*
+.announcement-bar .slider-buttons { 
+  display: none !important;
+}
+*/
+
+/* Fallback: Hide individual buttons */
+.announcement-bar .slider-button { 
+  display: none !important; 
+}
+
+/* Announcement Bar Text Styling (sections/announcementbars.liquid) */
+/* Targets the <p class="prose heading probea"> */
+#shopify-section-announcement-bar .announcement-bar .announcement-bar__carousel p.prose.heading.probea {
+  font-size: 0.8rem !important; /* Increase font size from 0.6rem */
+  font-weight: 700 !important; /* Make text bold */
+  color: var(--color-brand-ivory-white) !important; /* Ensure correct color */
+  /* Ensure visibility is handled by the JS, not overridden here */
+  /* display: block !important; <-- Avoid this, JS handles display */
+}
