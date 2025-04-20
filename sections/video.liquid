@@ -150,7 +150,8 @@
               autoplay: true,
               loop: section.settings.enable_video_looping,
               controls: false,
-              muted: true
+              muted: true,
+              playsinline: true
           }}
         {%- endif -%}
       </template>
@@ -228,23 +229,41 @@
     {%- endif -%}
 
     <script type="text/javascript">
-      // Immediately load the deferred media for this video section
       document.addEventListener('DOMContentLoaded', function() {
-        // Trigger mobile/default video
-        const deferredMediaElementMobile = document.getElementById('Deferred-Poster-Modal-{{ primary_video_id }}')?.closest('deferred-media');
-        if (deferredMediaElementMobile && typeof deferredMediaElementMobile.loadContent === 'function') {
-          setTimeout(() => {
-             deferredMediaElementMobile.loadContent(false);
-          }, 10); 
+        const mediaQueryDesktop = window.matchMedia('(min-width: 750px)');
+        
+        function loadVisibleVideo() {
+          if (mediaQueryDesktop.matches) {
+            // Desktop: Load desktop video if it exists
+            const videoIdDesktop = "{{ video_id_desktop | default: '' }}";
+            if (videoIdDesktop) {
+              const deferredMediaElementDesktop = document.getElementById(`Deferred-Poster-Modal-${videoIdDesktop}`)?.closest('deferred-media');
+              if (deferredMediaElementDesktop && typeof deferredMediaElementDesktop.loadContent === 'function') {
+                // Use setTimeout to ensure the element and its methods are ready
+                setTimeout(() => {
+                    deferredMediaElementDesktop.loadContent(false);
+                }, 10); 
+              }
+            }
+          } else {
+            // Mobile: Load mobile/default video
+            const videoIdMobile = "{{ primary_video_id | default: '' }}";
+             if (videoIdMobile) {
+                const deferredMediaElementMobile = document.getElementById(`Deferred-Poster-Modal-${videoIdMobile}`)?.closest('deferred-media');
+                if (deferredMediaElementMobile && typeof deferredMediaElementMobile.loadContent === 'function') {
+                  setTimeout(() => {
+                      deferredMediaElementMobile.loadContent(false);
+                  }, 10); 
+                }
+            }
+          }
         }
 
-        // Trigger desktop video if it exists
-        const deferredMediaElementDesktop = document.getElementById('Deferred-Poster-Modal-{{ video_id_desktop }}')?.closest('deferred-media');
-        if (deferredMediaElementDesktop && typeof deferredMediaElementDesktop.loadContent === 'function') {
-           setTimeout(() => {
-             deferredMediaElementDesktop.loadContent(false);
-          }, 10); 
-        }
+        // Initial load based on current viewport
+        loadVisibleVideo();
+
+        // Optional: Listen for resize changes (might not be strictly necessary if only load matters)
+        // mediaQueryDesktop.addEventListener('change', loadVisibleVideo);
       });
     </script>
 
