@@ -60,42 +60,61 @@
           {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
         {%- endif -%}
 
-        <div class="product-form__buttons">
-          {%- liquid
-            assign check_against_inventory = true
-            if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
-              assign check_against_inventory = false
-            endif
-            if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
-              assign quantity_rule_soldout = true
-            endif
-          -%}
-          <button
-            id="ProductSubmitButton-{{ section_id }}"
-            type="submit"
-            name="add"
-            class="buy-buttons product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
-            {% if product.selected_or_first_available_variant.available == false
-              or quantity_rule_soldout
-              or product.selected_or_first_available_variant == null
-            %}
-              disabled
-            {% endif %}
-          >
-            <span class="button-text">
-              {%- if product.selected_or_first_available_variant == null -%}
-                {{ 'products.product.unavailable' | t }}
-              {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
-                {{ 'products.product.sold_out' | t }}
-              {%- else -%}
-                {{ 'products.product.add_to_cart' | t }}
-              {%- endif -%}
-            </span>
-            {%- render 'loading-spinner' -%}
-          </button>
-          {%- if show_dynamic_checkout -%}
-            {{ form | payment_button }}
-          {%- endif -%}
+        <div class="buy-buttons-wrapper">
+          <div class="product-form__buttons">
+            {%- liquid
+              assign check_against_inventory = true
+              if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
+                assign check_against_inventory = false
+              endif
+              if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
+                assign quantity_rule_soldout = true
+              endif
+            -%}
+            
+            <!-- NEW Wrapper for ATC Button and Shipping Info -->
+            <div class="atc-shipping-box">
+              <button
+                id="ProductSubmitButton-{{ section_id }}"
+                type="submit"
+                name="add"
+                class="buy-buttons product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
+                {% if product.selected_or_first_available_variant.available == false
+                  or quantity_rule_soldout
+                  or product.selected_or_first_available_variant == null
+                %}
+                  disabled
+                {% endif %}
+              >
+                <span class="button-text">
+                  {%- if product.selected_or_first_available_variant == null -%}
+                    {{ 'products.product.unavailable' | t }}
+                  {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+                    {{ 'products.product.sold_out' | t }}
+                  {%- else -%}
+                    {{ 'products.product.add_to_cart' | t }}
+                  {%- endif -%}
+                </span>
+                {%- render 'loading-spinner' -%}
+              </button>
+
+              <!-- Only show shipping info if NOT in sticky bar context -->
+              {% unless section_id contains 'sticky' %}
+                <!-- NEW Shipping Info Section - Hidden in Quick Add/Sticky -->
+                <div class="shipping-info-product-page quick-add-hidden">
+                  <span class="shipping-dot"></span>
+                  <span class="shipping-text">Vandaag verzonden</span>
+                  <span class="shipping-flag">🇳🇱</span>
+                  <span class="shipping-text">Gratis verzending</span>
+                </div>
+              {% endunless %}
+            </div> <!-- End atc-shipping-box -->
+
+            <!-- Dynamic payment buttons remain outside the box -->
+            {%- if show_dynamic_checkout -%}
+              {{ form | payment_button }}
+            {%- endif -%}
+          </div>
         </div>
       {%- endform -%}
     </product-form>

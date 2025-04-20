@@ -535,3 +535,52 @@ details.accordion.group summary .animated-plus {
   /* Ensure visibility is handled by the JS, not overridden here */
   /* display: block !important; <-- Avoid this, JS handles display */
 }
+
+/* Shipping Info below ATC button */
+.buy-buttons-wrapper {
+  margin-top: 1rem; /* Add some space above the wrapper if needed */
+}
+
+.shipping-info-product-page {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center items horizontally */
+  gap: 0.5rem; /* Space between items */
+  margin-top: 0.5rem; /* Reduced space above this line */
+  font-size: 0.85rem; /* Slightly smaller font */
+  color: var(--color-brand-charcoal-black);
+}
+
+.shipping-dot {
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+  background-color: #28a745; /* Green color */
+  border-radius: 50%;
+  margin-right: 0.1em; /* Slight space after dot */
+}
+
+.shipping-flag {
+  font-size: 1.1em; /* Slightly larger flag */
+  margin-left: 0.2em; /* Space before flag */
+  margin-right: 0.1em; /* Slight space after flag */
+  vertical-align: middle;
+}
+
+.shipping-text {
+  vertical-align: middle;
+}
+
+/* Box styling for ATC and Shipping info */
+.atc-shipping-box {
+  background-color: #fff; /* White background for contrast */
+  padding: 1rem; /* Padding around content */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  margin-bottom: 1rem; /* Space below the box before dynamic buttons */
+}
+
+.atc-shipping-box .shipping-info-product-page {
+  margin-top: 0.5rem; /* Adjusted space between button and text inside box */
+  justify-content: center; /* Ensure it stays centered if needed */
+}
