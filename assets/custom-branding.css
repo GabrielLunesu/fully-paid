@@ -781,4 +781,119 @@ footer .payment-icons .payment-icon {
   }
 }
 
+/* Mobile Menu Drawer Styling - Attempt 3 (Simplify) */
+@media screen and (max-width: 749px) { 
+  /* Base state for the drawer (closed) */
+  details > #menu-drawer.menu-drawer {
+    position: absolute; /* Ensure positioning is defined */
+    z-index: 3; /* Match theme's z-index */
+    left: 10vw !important; /* Make narrower */
+    right: 10vw !important;/* Make narrower */
+    top: calc(var(--header-bottom-position, 100%) + 10px); /* Position below header + margin */
+    width: 80vw !important; /* Make narrower */
+    max-width: 80vw !important; /* Make narrower */
+    background-color: #f5ebdd !important; 
+    border-radius: 15px !important; 
+    height: auto !important; /* Let content determine height */
+    max-height: calc(var(--viewport-height, 100vh) - var(--header-bottom-position, 100%) - 20px); 
+    overflow-y: auto !important; 
+    filter: drop-shadow(0 4px 15px rgba(0,0,0,0.15));
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.05); 
+    /* Animation properties - closed state */
+    opacity: 0;
+    transform: translateY(-10px); /* Removed translateZ(0) */
+    pointer-events: none; /* Use pointer-events instead of visibility */
+    /* Transition for animation */
+    transition: transform 0.3s ease-out, 
+                opacity 0.3s ease-out;
+                /* Removed visibility transition */
+                /* Keep background transition if needed: background-color var(--duration-default) ease; */
+  }
+
+  /* Open state for the drawer */
+  details[open] > #menu-drawer.menu-drawer {
+    /* Remove styles now defined in the base rule above */
+
+    /* Animation properties - open state */
+    opacity: 1;
+    transform: translateY(0); /* Removed translateZ(0) */
+    pointer-events: auto; /* Enable interaction when open */
+  }
+
+  /* Reset inner container styles */
+  details[open] > #menu-drawer .menu-drawer__inner-container,
+  details[open] > #menu-drawer .menu-drawer__navigation-container {
+      height: auto; /* Allow height to adjust to content */
+      overflow: visible; /* Reset potential inner overflow */
+      background-color: transparent !important; /* Ensure no conflicting background */
+  }
+
+  /* Adjust inner navigation padding if needed */
+  .menu-drawer__navigation {
+    padding: 1rem 1.5rem; /* Reduced vertical padding */
+  }
+
+  /* Reduce menu item font size and padding */
+  .menu-drawer__menu-item {
+    padding: 0.9rem 1.5rem; /* Reduced padding */
+    font-size: 1.6rem !important; /* Smaller font size */
+  }
+
+  /* Adjust summary padding with icon */
+  .menu-drawer summary.menu-drawer__menu-item {
+    padding-right: 4.5rem; /* Adjust for icon */
+  }
+
+  /* Adjust icon position slightly */
+  .menu-drawer__menu-item > .svg-wrapper {
+    right: 1.5rem; /* Match padding */
+  }
+
+  /* Text Color */
+  .menu-drawer,
+  .menu-drawer__menu-item,
+  .menu-drawer__close-button,
+  .menu-drawer__account {
+    color: var(--color-brand-charcoal-black, #2C2C2C) !important; /* Use Charcoal for text on light beige */
+  }
+
+  .menu-drawer__menu-item:hover,
+  .menu-drawer__close-button:hover,
+  .menu-drawer__account:hover {
+    color: var(--color-brand-charcoal-black, #2C2C2C) !important;
+    background-color: rgba(var(--color-brand-charcoal-black-rgb, 44, 44, 44), 0.06) !important; /* Subtle hover */
+  }
+
+  .menu-drawer__menu-item > .svg-wrapper svg,
+  .menu-drawer__close-button .svg-wrapper svg,
+  .menu-drawer__account .svg-wrapper svg {
+     fill: var(--color-brand-charcoal-black, #2C2C2C) !important; /* Ensure icons match text */
+  }
+
+  /* Submenu styling (optional, might need adjustment) */
+  .js .menu-drawer__submenu {
+    background-color: #f5ebdd !important; /* Match main drawer */
+    border-radius: 0 0 15px 15px; /* Round bottom corners if needed */
+  }
+
+  /* Background Overlay - make it lighter */
+  .js menu-drawer > details[open]:not(.menu-opening) > summary::before {
+     background: rgba(var(--color-foreground-rgb), 0.3); /* Lighter overlay */
+  }
+
+  /* Add transition for sticky bar visibility on mobile */
+  .product-sticky-bar {
+      visibility: visible; /* Default state */
+      opacity: 1;       /* Default state */
+      transition: visibility 0.3s ease-out, opacity 0.3s ease-out; 
+  }
+
+  /* Hide sticky ATC when mobile menu is open */
+  body:has(menu-drawer details[open]) .product-sticky-bar { 
+      visibility: hidden !important; /* Increase specificity */
+      opacity: 0 !important;        /* Increase specificity */
+      pointer-events: none !important; /* Increase specificity */
+  }
+}
+
 
