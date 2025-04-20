@@ -106,15 +106,6 @@
                   </a>
                 </div>
 
-              {% when 'icons-info' %}
-                {%render 'icons-info', block: block %}
-
-
-
-
-
-
-
               {% when 'reviews' %}
                 {% render 'reviews-card',
                   review1_name: section.settings.review1_name,
@@ -171,6 +162,19 @@
                     {{ form | payment_terms }}
                   {%- endform -%}
                 </div>
+                
+                <!-- MOVED Wrapper for benefit icons grid HERE -->
+                {% if block.type == 'price' %}
+                  <div class="benefits-grid-mobile">
+                    {%- for icon_block in section.blocks -%}
+                      {%- if icon_block.type == 'icons-info' -%}
+                        {% render 'icons-info', block: icon_block %}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {% endif %}
+                <!-- End MOVED Wrapper -->
+
               {%- when 'inventory' -%}
                 <p
                   class="product__inventory{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.inventory_management != 'shopify' %} visibility-hidden{% endif %}"
