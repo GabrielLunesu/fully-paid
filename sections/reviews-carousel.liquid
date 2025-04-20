@@ -10,7 +10,7 @@ Reviews Carousel Section - Using Swiper.js
     /* --rc-card-gap: {{ section.settings.card_gap }}; */ /* Gap handled by Swiper spaceBetween */
     --rc-card-radius: {{ section.settings.card_radius }}px;
     --rc-card-shadow: 0 5px 15px rgba(var(--color-foreground-rgb), 0.08);
-    --rc-star-color: var(--color-brand-gold-dust, {{ section.settings.star_color | default: '#D4B07A' }});
+    --rc-star-color: #00b67a; /* Trustpilot Green */
     --rc-card-bg-default: var(--color-brand-ivory-white, #F9F7F1);
     --rc-card-color-default: var(--color-brand-charcoal-black, #2C2C2C);
     --rc-card-border-default: 1px solid rgba(var(--color-brand-olive-clay-rgb, 166, 140, 109), 0.2);
@@ -78,9 +78,9 @@ Reviews Carousel Section - Using Swiper.js
   } */
 
   /* Placeholder for avatar */
-  .rc-avatar-placeholder {
-    width: 40px;
-    height: 40px;
+  /* .rc-avatar-placeholder {
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background-color: rgba(var(--color-brand-olive-clay-rgb, 166, 140, 109), 0.15);
     display: flex;
@@ -88,37 +88,22 @@ Reviews Carousel Section - Using Swiper.js
     justify-content: center;
     flex-shrink: 0;
     overflow: hidden;
-    line-height: 0; /* Prevent text line-height affecting centering */
+    line-height: 0; 
   }
-
-  /* Removed SVG specific styles */
-  /* .rc-avatar-placeholder svg {
-    width: 60%;
-    height: 60%;
-    fill: var(--color-brand-olive-clay, #A68C6D);
-    display: block; 
-  } */
 
   .rc-avatar-placeholder img {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Cover the area */
-  }
+    object-fit: cover; 
+  } */
 
   .rc-header {
-    display: flex; /* Change back to row layout for placeholder + text */
-    flex-direction: row; /* Align placeholder and text side-by-side */
-    align-items: flex-start; /* Align tops of items instead of centers */
-    gap: 12px; /* Gap between placeholder and text block */
+    display: flex; 
+    flex-direction: column; /* Stack name/date/stars vertically */
+    align-items: flex-start; /* Align items to the start */
+    gap: 4px; /* Adjust gap */
     margin-bottom: 8px; /* Add some space below header */
-  }
-
-  .rc-header > div { /* Target the div containing name/date/stars */
-     display: flex;
-     flex-direction: column;
-     align-items: flex-start;
-     gap: 4px; /* Adjust gap within text block */
   }
 
   .rc-name {
@@ -152,6 +137,27 @@ Reviews Carousel Section - Using Swiper.js
     line-height: 1.4;
   }
 
+  .rc-section-header {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column; /* Stack logo and title vertically */
+    align-items: center;
+    justify-content: center; /* Center items vertically within the flex container */
+    gap: 0.5rem; /* Reduced gap for vertical layout */
+    margin-bottom: 2rem; /* Space below header */
+  }
+
+  .rc-section-header h2 {
+    margin: 0; /* Remove default margin */
+    font-size: 1.8rem; /* Adjust size as needed */
+  }
+
+  .rc-trustpilot-logo img { /* Style the img tag */
+    height: 28px; /* Maintain height */
+    width: auto;
+    display: block;
+  }
+
   /* Remove mobile specific width/gap/speed overrides - handle in Swiper settings */
   /* @media (max-width: 768px) { ... } */
   /* @media (max-width: 480px) { ... } */
@@ -163,6 +169,17 @@ Reviews Carousel Section - Using Swiper.js
 <!-- Gooey Filter Removed -->
 
 <section class="rc-carousel-section">
+
+  {%- if section.settings.title != blank -%}
+    <div class="rc-section-header">
+      <div class="rc-trustpilot-logo">
+        <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 162 39.5" role="img" aria-label="Trustpilot"> ... </svg> -->
+        <img src="{{ 'Trustpilot_logo.png' | asset_url }}" alt="Trustpilot Logo" height="28" width="115">
+      </div>
+      <h2>{{ section.settings.title | escape }}</h2>
+    </div>
+  {%- endif -%}
+
   <!-- Slider main container -->
   <div class="swiper" id="reviews-swiper-{{ section.id }}">
     <!-- Additional required wrapper -->
@@ -172,11 +189,7 @@ Reviews Carousel Section - Using Swiper.js
         <div class="swiper-slide">
           <div class="rc-review-card" style="--rc-card-bg: {{ block.settings.card_bg | default: 'transparent' }}; --rc-card-color: {{ block.settings.card_color | default: 'inherit' }};">
             <div class="rc-header">
-              <div class="rc-avatar-placeholder">
-                 <!-- <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/></svg> -->
-                 <img src="{{ 'avatar.png' | asset_url }}" alt="Reviewer Avatar" width="50" height="50">
-              </div>
-              <div> 
+              <div>
                 <div class="rc-name">{{ block.settings.name }}</div>
                 <div class="rc-date">{{ block.settings.date }}</div>
                 <div class="rc-stars">
@@ -270,9 +283,15 @@ Reviews Carousel Section - Using Swiper.js
 {
   "name": "Reviews Carousel (Swiper)", /* Updated Name */
   "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Wat onze klanten zeggen" /* Updated default to Dutch */
+    },
     /* Removed speed, card_width, card_gap - Handled by Swiper options */
     { "type": "range", "id": "card_radius", "label": "Card border radius (px)", "min": 0, "max": 50, "step": 2, "default": 16 },
-    { "type": "color", "id": "star_color", "label": "Star color", "default": "#D4B07A" },
+    /* { "type": "color", "id": "star_color", "label": "Star color", "default": "#D4B07A" }, */ /* Color is now fixed green */
     {
       "type": "header",
       "content": "Swiper Carousel Settings"
