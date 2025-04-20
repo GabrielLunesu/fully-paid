@@ -715,3 +715,40 @@ svg.payment-icon[aria-labelledby="pi-klarna"] {
   margin-right: 0.2em;
   border-radius: 5px;
 }
+
+/* Cart Drawer Checkout Button Branding - REMOVED */
+
+/* Payment Icons Styling in Cart Drawer */
+.cart-drawer__footer .payment-icons {
+  display: flex;
+  justify-content: center; /* Center icons horizontally */
+  align-items: center;
+  gap: 0.5rem; /* Space between icons */
+  margin-top: 1rem; /* Space above icons */
+  margin-bottom: 0.5rem; /* Space below icons */
+  flex-wrap: wrap; /* Allow icons to wrap if needed */
+}
+
+.cart-drawer__footer .payment-icons .payment-icon {
+  height: 24px; /* Keep consistent height */
+  width: auto; /* Allow width to adjust */
+  max-width: 38px; /* Set a max width */
+}
+
+
+.cart__checkout-button {
+  background-color: var(--color-brand-olive-clay) !important; /* Button background: Olive Clay */
+  color: var(--color-brand-olive-clay) !important; /* Button text: Ivory White */
+  border: 1px solid var(--color-brand-olive-clay) !important; /* Optional: ensure border matches */
+  border-radius: var(--border-radius); /* Use theme's border radius */
+}
+
+button#CartDrawer-Checkout {
+  background-color: var(--color-brand-olive-clay) !important; /* CTA hover: Terracotta */
+  border-color: var(--color-brand-olive-clay) !important;
+  color: var(--color-brand-ivory-white) !important;
+  --initial-color: var(--color-brand-ivory-white) !important;
+  --initial-gradient: var(--color-brand-ivory-white) !important;
+}
+
+
