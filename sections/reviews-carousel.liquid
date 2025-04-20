@@ -1,0 +1,322 @@
+{% comment %}
+Reviews Carousel Section - Using Swiper.js
+{% endcomment %}
+
+<style>
+  /* Reviews Carousel Scoped Styles */
+  :root {
+    /* --rc-speed: {{ section.settings.speed }}s; */ /* Speed handled by Swiper */
+    /* --rc-card-width: {{ section.settings.card_width }}px; */ /* Width handled by Swiper slidesPerView */
+    --rc-card-gap: {{ section.settings.card_gap }}; /* Used by Swiper spaceBetween */
+    --rc-card-radius: {{ section.settings.card_radius }}px;
+    --rc-card-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    --rc-star-color: {{ section.settings.star_color | default: '#28a745' }};
+  }
+
+  .rc-carousel-section .swiper {
+    position: relative;
+    width: 100%;
+    overflow: visible; /* Swiper handles overflow, allow shadows/hovers to peek */
+    padding: 40px 0;
+    /* filter: url(#rc-gooey); */ /* Disable filter again */
+  }
+
+  .rc-carousel-section .swiper-wrapper {
+    /* Apply linear transition timing for constant speed */
+    transition-timing-function: linear;
+  }
+
+  /* .rc-slider class removed - Swiper uses .swiper-wrapper */
+
+  .rc-carousel-section .swiper-slide {
+    /* flex: 0 0 var(--rc-card-width); */ /* Flex handled by Swiper */
+    height: auto; /* Allow height to adjust based on content */
+    box-sizing: border-box;
+    display: flex; /* Make slide a flex container for the card */
+  }
+
+  .rc-review-card { 
+    width: 100%; /* Make card fill the slide */
+    background: var(--rc-card-bg, #fff);
+    color: var(--rc-card-color, #333);
+    border-radius: var(--rc-card-radius);
+    box-shadow: var(--rc-card-shadow);
+    padding: 24px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+  }
+
+  .rc-review-card:hover {
+    transform: scale(1.06) translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  }
+
+  .rc-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0; /* Prevent avatar shrinking */
+  }
+
+  .rc-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .rc-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .rc-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .rc-date {
+    font-size: 0.9rem;
+    color: #777;
+  }
+
+  .rc-stars {
+    display: flex;
+    gap: 4px;
+  }
+
+  .rc-stars svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--rc-star-color);
+    stroke: var(--rc-star-color);
+  }
+
+  .rc-text {
+    flex: 1;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  /* Remove mobile specific width/gap/speed overrides - handle in Swiper settings */
+  /* @media (max-width: 768px) { ... } */
+  /* @media (max-width: 480px) { ... } */
+
+  /* Remove CSS animation keyframes */
+
+</style>
+
+<!-- Gooey Filter Removed -->
+
+<section class="rc-carousel-section">
+  <!-- Slider main container -->
+  <div class="swiper" id="reviews-swiper-{{ section.id }}">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+      <!-- Slides -->
+      {% for block in section.blocks %}
+        <div class="swiper-slide">
+          <div class="rc-review-card" style="--rc-card-bg: {{ block.settings.card_bg | default: '#fff' }}; --rc-card-color: {{ block.settings.card_color | default: '#333' }};">
+            <div class="rc-header">
+              <div class="rc-avatar">
+                {% if block.settings.avatar != blank %}
+                  <img src="{{ block.settings.avatar | img_url: '60x60' }}" alt="Avatar of {{ block.settings.name }}" width="60" height="60">
+                {% endif %}
+              </div>
+              <div>
+                <div class="rc-name">{{ block.settings.name }}</div>
+                <div class="rc-date">{{ block.settings.date }}</div>
+                <div class="rc-stars">
+                  {% for i in (1..5) %}
+                    {% if i <= block.settings.rating %}
+                      <svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568L24 9.423l-6 5.847L19.335 24 12 20.201 4.665 24 6 15.27 0 9.423l8.332-1.268z" /></svg>
+                    {% else %}
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M12 .587l3.668 7.568L24 9.423l-6 5.847L19.335 24 12 20.201 4.665 24 6 15.27 0 9.423l8.332-1.268z" /></svg>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <p class="rc-text">{{ block.settings.text }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <!-- If we need pagination -->
+    <!-- <div class="swiper-pagination"></div> -->
+    <!-- If we need navigation buttons -->
+    <!-- <div class="swiper-button-prev"></div> -->
+    <!-- <div class="swiper-button-next"></div> -->
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const swiperContainer = document.getElementById('reviews-swiper-{{ section.id }}');
+    if (!swiperContainer) return;
+
+    const swiperInstance = new Swiper(swiperContainer, {
+      // Core parameters
+      loop: true,
+      slidesPerView: {{ section.settings.swiper_slides_mobile }},
+      spaceBetween: {{ section.settings.swiper_space_between }},
+      freeMode: false,
+      /* freeModeMomentum: false, */ // Removing this for testing
+
+      // Autoplay for constant scroll
+      autoplay: {
+        delay: {{ section.settings.swiper_delay }}, // Re-link to small delay setting
+        disableOnInteraction: false, // Keep playing after user interaction
+        pauseOnMouseEnter: {{ section.settings.swiper_pause_on_hover }},
+      },
+      
+      // Main transition speed (set back to small value)
+      speed: {{ section.settings.swiper_speed }}, // Use the setting value
+
+      // Responsive breakpoints
+      breakpoints: {
+        // when window width is >= 768px
+        768: {
+          slidesPerView: {{ section.settings.swiper_slides_tablet }},
+          spaceBetween: {{ section.settings.swiper_space_between }}
+        },
+        // when window width is >= 990px
+        990: {
+          slidesPerView: {{ section.settings.swiper_slides_desktop }},
+          spaceBetween: {{ section.settings.swiper_space_between }}
+        }
+      },
+      
+      // Optional: Add modules if needed (e.g., Navigation, Pagination)
+      // navigation: {
+      //   nextEl: '.swiper-button-next',
+      //   prevEl: '.swiper-button-prev',
+      // },
+      // pagination: {
+      //   el: '.swiper-pagination',
+      //   clickable: true,
+      // },
+    });
+
+    // Optional: Stop autoplay when the section is not visible
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          swiperInstance.autoplay.start();
+        } else {
+          swiperInstance.autoplay.stop();
+        }
+      });
+    });
+    observer.observe(swiperContainer);
+
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Reviews Carousel (Swiper)", /* Updated Name */
+  "settings": [
+    /* Removed speed, card_width, card_gap - Handled by Swiper options */
+    { "type": "range", "id": "card_radius", "label": "Card border radius (px)", "min": 0, "max": 50, "step": 2, "default": 16 },
+    { "type": "color", "id": "star_color", "label": "Star color", "default": "#28a745" },
+    {
+      "type": "header",
+      "content": "Swiper Carousel Settings"
+    },
+    {
+      "type": "range",
+      "id": "swiper_speed",
+      "label": "Transition Speed (ms)", /* Updated label slightly */
+      "min": 100,
+      "max": 9000, /* Increased max speed significantly */
+      "step": 100, /* Increased step slightly */
+      "default": 9000, /* Increased default slightly */
+      "info": "Transition speed for slides. Higher values slow down the scroll."
+    },
+    {
+      "type": "range",
+      "id": "swiper_delay",
+      "label": "Autoplay Delay (ms - use 1 for continuous)",
+      "min": 1,
+      "max": 100, /* Keep max low */
+      "step": 1,
+      "default": 1,
+      "info": "Minimal delay between transitions. Set to 1ms."
+    },
+     {
+      "type": "range",
+      "id": "swiper_slides_desktop",
+      "label": "Slides per view (Desktop)",
+      "min": 1,
+      "max": 6,
+      "step": 0.5, /* Allow partial slides */
+      "default": 3.5
+    },
+    {
+      "type": "range",
+      "id": "swiper_slides_tablet",
+      "label": "Slides per view (Tablet)",
+      "min": 1,
+      "max": 4,
+      "step": 0.5,
+      "default": 2.5
+    },
+     {
+      "type": "range",
+      "id": "swiper_slides_mobile",
+      "label": "Slides per view (Mobile)",
+      "min": 1,
+      "max": 3,
+      "step": 0.5,
+      "default": 1.5
+    },
+    {
+      "type": "range",
+      "id": "swiper_space_between",
+      "label": "Space between slides (px)",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 24
+    },
+    /* {
+       "type": "checkbox",
+       "id": "swiper_free_mode",
+       "label": "Enable Free Mode",
+       "default": true,
+       "info": "Allows free scrolling without snapping to slides. Good for continuous effect."
+    }, */
+    {
+       "type": "checkbox",
+       "id": "swiper_pause_on_hover",
+       "label": "Pause autoplay on hover",
+       "default": true
+    }
+    /* Removed old mobile settings */
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "image_picker", "id": "avatar", "label": "Avatar image" },
+        { "type": "text", "id": "name", "label": "Reviewer name", "default": "John Doe" },
+        { "type": "text", "id": "date", "label": "Date", "default": "March 6, 3:45 PM" },
+        { "type": "range", "id": "rating", "label": "Rating (1-5)", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "textarea", "id": "text", "label": "Review text", "default": "Amazing service! Highly recommended." },
+        { "type": "color", "id": "card_bg", "label": "Card background color", "default": "#ffffff" },
+        { "type": "color", "id": "card_color", "label": "Text color", "default": "#333333" }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    { "name": "Reviews Carousel (Swiper)" } /* Updated Name */
+  ]
+}
+{% endschema %}
