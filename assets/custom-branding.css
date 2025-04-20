@@ -584,3 +584,13 @@ details.accordion.group summary .animated-plus {
   margin-top: 0.5rem; /* Adjusted space between button and text inside box */
   justify-content: center; /* Ensure it stays centered if needed */
 }
+
+/* Hide Klarna dynamic payment button container */
+.shopify-payment-button__button--klarna {
+  display: none !important;
+}
+
+/* Hide Klarna SVG Payment Icon */
+svg.payment-icon[aria-labelledby="pi-klarna"] {
+  display: none !important;
+}
