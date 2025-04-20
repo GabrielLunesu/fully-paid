@@ -2,6 +2,11 @@
 {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
+  /* Hide the play button overlay on the deferred media poster */
+  .video-section__media .deferred-media__poster-button {
+    display: none;
+  }
+
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
@@ -89,7 +94,7 @@
           -%}
           {%- if section.settings.video_url.type == 'youtube' -%}
             <iframe
-              src="https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1&autoplay=1{{ loop }}"
+              src="https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1&autoplay=1&controls=0{{ loop }}"
               class="js-youtube"
               allow="autoplay; encrypted-media"
               allowfullscreen
@@ -97,7 +102,7 @@
             ></iframe>
           {%- else -%}
             <iframe
-              src="https://player.vimeo.com/video/{{ video_id }}?autoplay=1{{ loop }}"
+              src="https://player.vimeo.com/video/{{ video_id }}?autoplay=1&controls=0{{ loop }}"
               class="js-vimeo"
               allow="autoplay; encrypted-media"
               allowfullscreen
@@ -111,12 +116,26 @@
               image_size: '1100x',
               autoplay: true,
               loop: section.settings.enable_video_looping,
-              controls: true,
-              muted: false
+              controls: false,
+              muted: true
           }}
         {%- endif -%}
       </template>
     </deferred-media>
+
+    <script type="text/javascript">
+      // Immediately load the deferred media for this video section
+      document.addEventListener('DOMContentLoaded', function() {
+        const deferredMediaElement = document.getElementById('Deferred-Poster-Modal-{{ video_id }}')?.closest('deferred-media');
+        if (deferredMediaElement && typeof deferredMediaElement.loadContent === 'function') {
+          // Use setTimeout to ensure the element and its methods are ready
+          setTimeout(() => {
+             deferredMediaElement.loadContent(false);
+          }, 10); // Small delay just in case
+        }
+      });
+    </script>
+
   </div>
 </div>
 
@@ -167,7 +186,7 @@
       "type": "checkbox",
       "id": "enable_video_looping",
       "label": "t:sections.video.settings.enable_video_looping.label",
-      "default": false
+      "default": true
     },
     {
       "type": "header",
