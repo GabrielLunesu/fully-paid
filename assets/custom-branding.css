@@ -594,3 +594,19 @@ details.accordion.group summary .animated-plus {
 svg.payment-icon[aria-labelledby="pi-klarna"] {
   display: none !important;
 }
+
+/* Reduce size of product image thumbnail slider */
+.thumbnail-slider {
+  max-width: 90%; /* Make the slider container narrower */
+  margin-left: auto !important; /* Center the container */
+  margin-right: auto !important;
+  margin-top: -0.5rem !important;
+
+  
+}
+
+.thumbnail-list__item {
+  max-width: 80px; /* Reduce the max width of each thumbnail item */
+  /* The height will usually adjust automatically based on aspect ratio */
+}
+
