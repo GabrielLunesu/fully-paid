@@ -774,4 +774,11 @@ footer .payment-icons .payment-icon {
   display: inline-block !important; 
 }
 
+/* Hide Sticky ATC on Desktop */
+@media screen and (min-width: 750px) {
+  .product-sticky-bar {
+    display: none !important; /* Use !important to help override other styles */
+  }
+}
+
 
