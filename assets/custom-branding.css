@@ -157,7 +157,7 @@ span.cstm-discount-percentage.tt { /* Added your custom class */
   backdrop-filter: blur(5px); /* Blur effect for glass */
   -webkit-backdrop-filter: blur(5px); /* Safari support */
   padding: 0.8rem 1.2rem;
-  border-radius: 15px; /* Less rounded corners */
+  border-radius: 10px; /* Updated from 15px to make it more rounded */
   border: 1px solid rgba(var(--color-foreground-rgb), 0.15); /* Slightly stronger border */
   margin-bottom: 0.75rem;
   gap: 0.8rem;
@@ -689,6 +689,7 @@ svg.payment-icon[aria-labelledby="pi-klarna"] {
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.5)); /* Gradient for WOW */
   box-shadow: 0 4px 10px rgba(var(--color-brand-charcoal-black-rgb, 44, 44, 44), 0.12); /* Enhanced shadow */
   transition: transform 0.3s ease-out, box-shadow 0.3s ease-out; /* Smoother transition */
+  border-radius: 10px; /* Increased from 15px to make it more rounded */
 }
 
 /* Adjust text size within pills */
@@ -707,3 +708,10 @@ svg.payment-icon[aria-labelledby="pi-klarna"] {
     box-shadow: 0 6px 15px rgba(var(--color-brand-charcoal-black-rgb, 44, 44, 44), 0.18); /* More prominent shadow on hover */
 }
 
+.price span.cstm-discount-percentage.tt {
+  font-size: 1rem !important;
+  padding: 0.2rem 0.4rem;
+  margin-left: 0.2em;
+  margin-right: 0.2em;
+  border-radius: 5px;
+}
