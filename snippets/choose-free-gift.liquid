@@ -1,7 +1,7 @@
 <div class="free-gift-section-wrapper">
   {% if block.settings.title != blank %}
-    <h3 class="choose-gift-title">{{ block.settings.title }}</h3>
-    <p class="choose-gift-subtitle">Kies jouw favoriete gift t.w.v. €20,-</p>
+    <h3 class="choose-gift-title">Jouw gratis Aurelima™ gift</h3>
+    <p class="choose-gift-subtitle">Bij elke bestelling ontvang je een cadeau t.w.v €20,-</p>
   {% endif %}
 
   <div class="choose-gift-grid">
@@ -12,7 +12,7 @@
         <label class="gift-card {% if forloop.index == 1 %}selected{% endif %}">
           <input type="radio" name="gift_option" value="{{ product.variants.first.id }}" {% if forloop.index == 1 %}checked{% endif %} style="display: none;">
           <div class="gift-card-inner">
-            <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
+            <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}" width="240" height="240">
             <div class="gift-title">{{ product.title }}</div>
           </div>
         </label>
