@@ -718,8 +718,8 @@ svg.payment-icon[aria-labelledby="pi-klarna"] {
 
 /* Cart Drawer Checkout Button Branding - REMOVED */
 
-/* Payment Icons Styling in Cart Drawer */
-.cart-drawer__footer .payment-icons {
+/* Payment Icons Styling in Cart Drawer (Specific) */
+#CartDrawer .cart-drawer__footer .payment-icons {
   display: flex;
   justify-content: center; /* Center icons horizontally */
   align-items: center;
@@ -729,7 +729,7 @@ svg.payment-icon[aria-labelledby="pi-klarna"] {
   flex-wrap: wrap; /* Allow icons to wrap if needed */
 }
 
-.cart-drawer__footer .payment-icons .payment-icon {
+#CartDrawer .cart-drawer__footer .payment-icons .payment-icon {
   height: 24px; /* Keep consistent height */
   width: auto; /* Allow width to adjust */
   max-width: 38px; /* Set a max width */
@@ -749,6 +749,29 @@ button#CartDrawer-Checkout {
   color: var(--color-brand-ivory-white) !important;
   --initial-color: var(--color-brand-ivory-white) !important;
   --initial-gradient: var(--color-brand-ivory-white) !important;
+}
+
+/* Force Footer Payment Icons to Display (Troubleshooting) - REMOVING */
+
+/* Specifically target iDEAL in footer if still hidden - REMOVING */
+
+/* Apply Cart Drawer Icon Styles to Footer Icons */
+footer .payment-icons {
+  display: flex;
+  justify-content: center; /* Center icons horizontally */
+  align-items: center;
+  gap: 0.5rem; /* Space between icons */
+  margin-top: 1rem; /* Space above icons */
+  margin-bottom: 0.5rem; /* Space below icons */
+  flex-wrap: wrap; /* Allow icons to wrap if needed */
+}
+
+footer .payment-icons .payment-icon {
+  height: 24px; /* Keep consistent height */
+  width: auto; /* Allow width to adjust */
+  max-width: 38px; /* Set a max width */
+  /* Add display just in case */
+  display: inline-block !important; 
 }
 
 
