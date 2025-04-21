@@ -5,7 +5,8 @@ class DetailsDisclosure extends HTMLElement {
     this.content = this.mainDetailsToggle.querySelector('summary').nextElementSibling;
 
     this.mainDetailsToggle.addEventListener('focusout', this.onFocusOut.bind(this));
-    this.mainDetailsToggle.addEventListener('toggle', this.onToggle.bind(this));
+    // Comment out the toggle event listener
+    // this.mainDetailsToggle.addEventListener('toggle', this.onToggle.bind(this));
   }
 
   onFocusOut() {
@@ -14,15 +15,19 @@ class DetailsDisclosure extends HTMLElement {
     });
   }
 
+  /* Comment out the entire onToggle method
   onToggle() {
     if (!this.animations) this.animations = this.content.getAnimations();
 
     if (this.mainDetailsToggle.hasAttribute('open')) {
       this.animations.forEach((animation) => animation.play());
-    } else {
-      this.animations.forEach((animation) => animation.cancel());
-    }
+    } 
+    /* else {
+      // Prevent JS from cancelling the closing animation - let CSS handle it
+      // this.animations.forEach((animation) => animation.cancel()); 
+    } * / // Corrected comment closing
   }
+  */
 
   close() {
     this.mainDetailsToggle.removeAttribute('open');

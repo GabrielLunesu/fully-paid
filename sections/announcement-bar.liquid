@@ -58,6 +58,7 @@
         aria-label="{{ 'sections.announcements.announcement_bar' | t }}"
       >
         <div class="announcement-bar-slider slider-buttons">
+          {% comment %} Remove Previous Button
           <button
             type="button"
             class="slider-button slider-button--prev"
@@ -69,6 +70,7 @@
               {{- 'icon-caret.svg' | inline_asset_content -}}
             </span>
           </button>
+          {% endcomment %}
           <div
             class="grid grid--1-col slider slider--everywhere"
             id="Slider-{{ section.id }}"
@@ -113,6 +115,7 @@
               </div>
             {%- endfor -%}
           </div>
+          {% comment %} Remove Next Button
           <button
             type="button"
             class="slider-button slider-button--next"
@@ -124,6 +127,7 @@
               {{- 'icon-caret.svg' | inline_asset_content -}}
             </span>
           </button>
+          {% endcomment %}
         </div>
       </slideshow-component>
       {%- if request.design_mode -%}

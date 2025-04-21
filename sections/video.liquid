@@ -2,6 +2,27 @@
 {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
+  /* Hide the play button overlay on the deferred media poster */
+  .video-section__media .deferred-media__poster-button {
+    display: none;
+  }
+
+  /* Show/hide videos based on viewport */
+  .video-desktop {
+    display: none; /* Hidden by default */
+  }
+  .video-mobile {
+    display: block; /* Shown by default */
+  }
+  @media screen and (min-width: 750px) {
+    .video-desktop {
+      display: block; /* Show desktop video */
+    }
+    .video-mobile {
+      display: none; /* Hide mobile video */
+    }
+  }
+
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
@@ -20,6 +41,13 @@
   assign video_alt = section.settings.video.alt | default: section.settings.description
   assign alt = 'sections.video.load_video' | t: description: video_alt | escape
   assign poster = section.settings.video.preview_image | default: section.settings.cover_image
+
+  assign video_id_desktop = section.settings.video_desktop.id | default: section.settings.video_url_desktop.id
+  assign poster_desktop = section.settings.video_desktop.preview_image | default: section.settings.cover_image_desktop | default: poster
+  assign has_desktop_video = false
+  if section.settings.video_desktop != null or section.settings.video_url_desktop != null
+    assign has_desktop_video = true
+  endif
 
   if section.settings.video != null
     assign ratio_diff = section.settings.video.aspect_ratio | minus: poster.aspect_ratio | abs
@@ -51,22 +79,31 @@
         </div>
       {%- endunless -%}
     </div>
+
+    {% liquid
+      # Determine which poster and ID to use for the primary deferred media element
+      # Use mobile by default, but could adapt this logic if needed
+      assign primary_poster = poster
+      assign primary_video_id = video_id
+    %}
+
+    {% comment %} Mobile / Default Video Element {% endcomment %}
     <deferred-media
-      class="video-section__media deferred-media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-      data-media-id="{{ video_id }}"
-      {% if poster != null %}
-        style="--ratio-percent: {{ 1 | divided_by: poster.aspect_ratio | times: 100 }}%;"
+      class="video-mobile video-section__media deferred-media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+      data-media-id="{{ primary_video_id }}"
+      {% if primary_poster != null %}
+        style="--ratio-percent: {{ 1 | divided_by: primary_poster.aspect_ratio | times: 100 }}%;"
       {% endif %}
     >
       <button
-        id="Deferred-Poster-Modal-{{ video_id }}"
+        id="Deferred-Poster-Modal-{{ primary_video_id }}"
         class="video-section__poster media deferred-media__poster media--landscape"
         type="button"
         aria-label="{{ alt }}"
       >
-        {%- if poster != null -%}
-          {{
-            poster
+        {%- if primary_poster != null -%}
+          {{ 
+            primary_poster
             | image_url: width: 3840
             | image_tag: sizes: sizes, widths: '375, 750, 1100, 1500, 1780, 2000, 3000, 3840', alt: alt
           }}
@@ -80,16 +117,17 @@
         </span>
       </button>
       <template>
+        {%- comment -%} Mobile/Default Video Player {%- endcomment -%}
         {%- if section.settings.video == null and section.settings.video_url != null -%}
           {%- liquid
             assign loop = ''
             if section.settings.enable_video_looping
-              assign loop = '&loop=1&playlist=' | append: video_id
+              assign loop = '&loop=1&playlist=' | append: primary_video_id
             endif
           -%}
           {%- if section.settings.video_url.type == 'youtube' -%}
             <iframe
-              src="https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1&autoplay=1{{ loop }}"
+              src="https://www.youtube.com/embed/{{ primary_video_id }}?enablejsapi=1&autoplay=1&controls=0{{ loop }}"
               class="js-youtube"
               allow="autoplay; encrypted-media"
               allowfullscreen
@@ -97,7 +135,7 @@
             ></iframe>
           {%- else -%}
             <iframe
-              src="https://player.vimeo.com/video/{{ video_id }}?autoplay=1{{ loop }}"
+              src="https://player.vimeo.com/video/{{ primary_video_id }}?autoplay=1&controls=0{{ loop }}"
               class="js-vimeo"
               allow="autoplay; encrypted-media"
               allowfullscreen
@@ -111,12 +149,124 @@
               image_size: '1100x',
               autoplay: true,
               loop: section.settings.enable_video_looping,
-              controls: true,
-              muted: false
+              controls: false,
+              muted: true,
+              playsinline: true
           }}
         {%- endif -%}
       </template>
     </deferred-media>
+
+    {% comment %} Desktop Video Element (Only if desktop video is set) {% endcomment %}
+    {%- if has_desktop_video -%}
+      <deferred-media
+        class="video-desktop video-section__media deferred-media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+        data-media-id="{{ video_id_desktop }}"
+        {% if poster_desktop != null %}
+          style="--ratio-percent: {{ 1 | divided_by: poster_desktop.aspect_ratio | times: 100 }}%;"
+        {% endif %}
+      >
+        <button
+          id="Deferred-Poster-Modal-{{ video_id_desktop }}"
+          class="video-section__poster media deferred-media__poster media--landscape"
+          type="button"
+          aria-label="{{ alt }}"
+        >
+          {%- if poster_desktop != null -%}
+            {{ 
+              poster_desktop
+              | image_url: width: 3840
+              | image_tag: sizes: sizes, widths: '375, 750, 1100, 1500, 1780, 2000, 3000, 3840', alt: alt
+            }}
+          {%- else -%}
+            {{ 'hero-apparel-3' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+          {%- endif -%}
+          <span class="deferred-media__poster-button motion-reduce">
+            <span class="svg-wrapper">
+              {{- 'icon-play.svg' | inline_asset_content -}}
+            </span>
+          </span>
+        </button>
+        <template>
+           {%- comment -%} Desktop Video Player {%- endcomment -%}
+          {%- if section.settings.video_desktop == null and section.settings.video_url_desktop != null -%}
+            {%- liquid
+              assign loop_desktop = ''
+              if section.settings.enable_video_looping
+                assign loop_desktop = '&loop=1&playlist=' | append: video_id_desktop
+              endif
+            -%}
+            {%- if section.settings.video_url_desktop.type == 'youtube' -%}
+              <iframe
+                src="https://www.youtube.com/embed/{{ video_id_desktop }}?enablejsapi=1&autoplay=1&controls=0{{ loop_desktop }}"
+                class="js-youtube"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+                title="{{ section.settings.description | escape }}"
+              ></iframe>
+            {%- else -%}
+              <iframe
+                src="https://player.vimeo.com/video/{{ video_id_desktop }}?autoplay=1&controls=0{{ loop_desktop }}"
+                class="js-vimeo"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+                title="{{ section.settings.description | escape }}"
+              ></iframe>
+            {%- endif -%}
+          {%- else -%}
+            {{ 
+              section.settings.video_desktop
+              | video_tag:
+                image_size: '1100x',
+                autoplay: true, 
+                loop: section.settings.enable_video_looping,
+                controls: false, 
+                muted: true 
+            }}
+          {%- endif -%}
+        </template>
+      </deferred-media>
+    {%- endif -%}
+
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', function() {
+        const mediaQueryDesktop = window.matchMedia('(min-width: 750px)');
+        
+        function loadVisibleVideo() {
+          if (mediaQueryDesktop.matches) {
+            // Desktop: Load desktop video if it exists
+            const videoIdDesktop = "{{ video_id_desktop | default: '' }}";
+            if (videoIdDesktop) {
+              const deferredMediaElementDesktop = document.getElementById(`Deferred-Poster-Modal-${videoIdDesktop}`)?.closest('deferred-media');
+              if (deferredMediaElementDesktop && typeof deferredMediaElementDesktop.loadContent === 'function') {
+                // Use setTimeout to ensure the element and its methods are ready
+                setTimeout(() => {
+                    deferredMediaElementDesktop.loadContent(false);
+                }, 10); 
+              }
+            }
+          } else {
+            // Mobile: Load mobile/default video
+            const videoIdMobile = "{{ primary_video_id | default: '' }}";
+             if (videoIdMobile) {
+                const deferredMediaElementMobile = document.getElementById(`Deferred-Poster-Modal-${videoIdMobile}`)?.closest('deferred-media');
+                if (deferredMediaElementMobile && typeof deferredMediaElementMobile.loadContent === 'function') {
+                  setTimeout(() => {
+                      deferredMediaElementMobile.loadContent(false);
+                  }, 10); 
+                }
+            }
+          }
+        }
+
+        // Initial load based on current viewport
+        loadVisibleVideo();
+
+        // Optional: Listen for resize changes (might not be strictly necessary if only load matters)
+        // mediaQueryDesktop.addEventListener('change', loadVisibleVideo);
+      });
+    </script>
+
   </div>
 </div>
 
@@ -167,20 +317,20 @@
       "type": "checkbox",
       "id": "enable_video_looping",
       "label": "t:sections.video.settings.enable_video_looping.label",
-      "default": false
+      "default": true
     },
     {
       "type": "header",
-      "content": "t:sections.video.settings.header__1.content"
+      "content": "Video Source (Mobile / Default)"
     },
     {
       "type": "video",
       "id": "video",
-      "label": "t:sections.video.settings.video.label"
+      "label": "Video (Mobile / Default)"
     },
     {
       "type": "header",
-      "content": "t:sections.video.settings.header__2.content"
+      "content": "Video Source URL (Mobile / Default)"
     },
     {
       "type": "paragraph",
@@ -191,18 +341,44 @@
       "id": "video_url",
       "accept": ["youtube", "vimeo"],
       "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-      "label": "t:sections.video.settings.video_url.label",
+      "label": "Video URL (Mobile / Default)",
       "info": "t:sections.video.settings.video_url.info"
     },
     {
       "type": "image_picker",
       "id": "cover_image",
-      "label": "t:sections.video.settings.cover_image.label"
+      "label": "Cover Image (Mobile / Default)"
+    },
+    {
+      "type": "header",
+      "content": "Video Source (Desktop - Optional)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Leave blank to use the mobile/default video on desktop."
+    },
+    {
+      "type": "video",
+      "id": "video_desktop",
+      "label": "Video (Desktop)"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url_desktop",
+      "accept": ["youtube", "vimeo"],
+      "label": "Video URL (Desktop)",
+      "info": "t:sections.video.settings.video_url.info"
+    },
+    {
+      "type": "image_picker",
+      "id": "cover_image_desktop",
+      "label": "Cover Image (Desktop)",
+      "info": "Optional. If blank, uses the mobile/default cover image."
     },
     {
       "type": "text",
       "id": "description",
-      "label": "t:sections.video.settings.description.label",
+      "label": "Video Description (Accessibility)",
       "info": "t:sections.video.settings.description.info"
     },
     {

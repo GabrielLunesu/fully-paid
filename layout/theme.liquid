@@ -536,6 +536,16 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
+
+    {{ 'custom-branding.css' | asset_url | stylesheet_tag }}
+
+    {{ shop.metafields.loox.globals }}
+
+    <!-- Swiper.js via CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer="defer"></script>
+    <!-- End Swiper.js -->
+
   </head>
 
   <body class="white-background{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">

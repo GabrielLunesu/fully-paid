@@ -1,0 +1,390 @@
+{% comment %}
+Reviews Carousel Section - Using Swiper.js
+{% endcomment %}
+
+<style>
+  /* Reviews Carousel Scoped Styles */
+  :root {
+    /* --rc-speed: {{ section.settings.speed }}s; */ /* Speed handled by Swiper */
+    /* --rc-card-width: {{ section.settings.card_width }}px; */ /* Width handled by Swiper slidesPerView */
+    /* --rc-card-gap: {{ section.settings.card_gap }}; */ /* Gap handled by Swiper spaceBetween */
+    --rc-card-radius: {{ section.settings.card_radius }}px;
+    --rc-card-shadow: 0 5px 15px rgba(var(--color-foreground-rgb), 0.08);
+    --rc-star-color: #00b67a; /* Trustpilot Green */
+    --rc-card-bg-default: var(--color-brand-ivory-white, #F9F7F1);
+    --rc-card-color-default: var(--color-brand-charcoal-black, #2C2C2C);
+    --rc-card-border-default: 1px solid rgba(var(--color-brand-olive-clay-rgb, 166, 140, 109), 0.2);
+  }
+
+  .rc-carousel-section .swiper {
+    position: relative;
+    width: 100%;
+    overflow: hidden; /* Change back to hidden to prevent viewport overflow */
+    padding: 40px 0;
+    /* filter: url(#rc-gooey); */ /* Disable filter again */
+    height: auto;
+    box-sizing: border-box;
+    display: flex; /* Make slide a flex container for the card */
+  }
+
+  .rc-carousel-section .swiper-wrapper {
+    /* Apply linear transition timing for constant speed */
+    transition-timing-function: linear;
+    /* Prevent slides from stretching to equal height */
+    align-items: flex-start;
+  }
+
+  /* .rc-slider class removed - Swiper uses .swiper-wrapper */
+
+  .rc-carousel-section .swiper-slide {
+    /* flex: 0 0 var(--rc-card-width); */ /* Flex handled by Swiper */
+    height: auto; /* Allow height to adjust based on content */
+    box-sizing: border-box;
+    display: flex; /* Make slide a flex container for the card */
+  }
+
+  .rc-review-card { 
+    width: 100%; /* Make card fill the slide */
+    background: var(--rc-card-bg, var(--rc-card-bg-default));
+    color: var(--rc-card-color, var(--rc-card-color-default));
+    border-radius: var(--rc-card-radius);
+    border: var(--rc-card-border-default);
+    box-shadow: var(--rc-card-shadow);
+    padding: 24px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Adjusted gap */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+  }
+
+  .rc-review-card:hover {
+    transform: translateY(-5px); /* Simpler hover */
+    box-shadow: 0 10px 25px rgba(var(--color-foreground-rgb), 0.12); /* Enhanced shadow */
+  }
+
+  /* .rc-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0; 
+  }
+
+  .rc-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  } */
+
+  /* Placeholder for avatar */
+  /* .rc-avatar-placeholder {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(var(--color-brand-olive-clay-rgb, 166, 140, 109), 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    line-height: 0; 
+  }
+
+  .rc-avatar-placeholder img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+  } */
+
+  .rc-header {
+    display: flex; 
+    flex-direction: column; /* Stack name/date/stars vertically */
+    align-items: flex-start; /* Align items to the start */
+    gap: 4px; /* Adjust gap */
+    margin-bottom: 4px; /* Add some space below header */
+  }
+
+  .rc-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--rc-card-color, var(--rc-card-color-default)); /* Ensure color */
+  }
+
+  .rc-date {
+    font-size: 0.85rem; /* Slightly smaller */
+    color: color-mix(in srgb, var(--rc-card-color, var(--rc-card-color-default)) 70%, transparent); /* Use mix for lighter text */
+    line-height: 1.2;
+  }
+
+  .rc-stars {
+    display: flex;
+    gap: 3px; /* Tighter star gap */
+    line-height: 1; /* Prevent extra height */
+  }
+
+  .rc-stars svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--rc-star-color);
+    stroke: var(--rc-star-color);
+  }
+
+  .rc-text {
+    flex: 1;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .rc-section-header {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column; /* Stack logo and title vertically */
+    align-items: center;
+    justify-content: center; /* Center items vertically within the flex container */
+    gap: 0.2rem; /* Reduced gap for vertical layout */
+    margin-bottom: 2rem; /* Space below header */
+  }
+
+  .rc-section-header h2 {
+    margin: 0; /* Remove default margin */
+    font-size: 1.8rem; /* Adjust size as needed */
+  }
+
+  .rc-trustpilot-logo svg { /* Style the SVG */
+    height: 24px; /* Control height */
+    width: auto;
+    display: block;
+  }
+
+  /* Remove mobile specific width/gap/speed overrides - handle in Swiper settings */
+  /* @media (max-width: 768px) { ... } */
+  /* @media (max-width: 480px) { ... } */
+
+  /* Remove CSS animation keyframes */
+
+</style>
+
+<!-- Gooey Filter Removed -->
+
+<section class="rc-carousel-section">
+
+  {%- if section.settings.title != blank -%}
+    <div class="rc-section-header">
+      <div class="rc-trustpilot-logo">
+        <!-- <img src="{{ 'Trustpilot_logo.png' | asset_url }}" alt="Trustpilot Logo" height="28" width="115"> -->
+        <svg height="28" viewBox="20.5 248.5 600 147.3" width="auto" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Trustpilot"><path d="m178.2 300.7h60.7v11.3h-23.9v63.7h-13.1v-63.7h-23.8zm58.1 20.7h11.2v10.5h.2c.4-1.5 1.1-2.9 2.1-4.3s2.2-2.7 3.7-3.8c1.4-1.2 3-2.1 4.8-2.8 1.7-.7 3.5-1.1 5.3-1.1 1.4 0 2.4.1 2.9.1.5.1 1.1.2 1.6.2v11.5c-.8-.2-1.7-.3-2.6-.4s-1.7-.2-2.6-.2c-2 0-3.9.4-5.7 1.2s-3.3 2-4.7 3.5c-1.3 1.6-2.4 3.5-3.2 5.8s-1.2 5-1.2 8v25.8h-12zm86.8 54.3h-11.8v-7.6h-.2c-1.5 2.8-3.7 4.9-6.6 6.6s-5.9 2.5-8.9 2.5c-7.1 0-12.3-1.7-15.5-5.3-3.2-3.5-4.8-8.9-4.8-16v-34.5h12v33.3c0 4.8.9 8.2 2.8 10.1 1.8 2 4.4 3 7.7 3 2.5 0 4.6-.4 6.3-1.2s3.1-1.8 4.1-3.1c1.1-1.3 1.8-2.9 2.3-4.7s.7-3.8.7-5.9v-31.5h12v54.3zm20.4-17.4c.4 3.5 1.7 5.9 4 7.4 2.3 1.4 5.1 2.1 8.3 2.1 1.1 0 2.4-.1 3.8-.3s2.8-.5 4-1c1.3-.5 2.3-1.2 3.1-2.2s1.2-2.2 1.1-3.7-.6-2.8-1.7-3.8-2.4-1.7-4-2.4c-1.6-.6-3.5-1.1-5.6-1.5s-4.2-.9-6.4-1.4-4.4-1.1-6.5-1.8-3.9-1.6-5.6-2.9c-1.6-1.2-3-2.7-3.9-4.6-1-1.9-1.5-4.1-1.5-6.9 0-3 .7-5.4 2.2-7.4 1.4-2 3.3-3.6 5.5-4.8s4.7-2.1 7.4-2.6 5.3-.7 7.7-.7c2.8 0 5.5.3 8 .9s4.9 1.5 6.9 2.9c2.1 1.3 3.8 3.1 5.1 5.2 1.4 2.1 2.2 4.7 2.6 7.7h-12.5c-.6-2.9-1.9-4.8-3.9-5.8-2.1-1-4.4-1.5-7.1-1.5-.8 0-1.9.1-3 .2-1.2.2-2.2.4-3.3.8-1 .4-1.9 1-2.6 1.7s-1.1 1.7-1.1 2.9c0 1.5.5 2.6 1.5 3.5s2.3 1.6 4 2.3c1.6.6 3.5 1.1 5.6 1.5s4.3.9 6.5 1.4 4.3 1.1 6.4 1.8 4 1.6 5.6 2.9c1.6 1.2 3 2.7 4 4.5s1.5 4.1 1.5 6.7c0 3.2-.7 5.9-2.2 8.2-1.5 2.2-3.4 4.1-5.7 5.5s-5 2.4-7.8 3.1c-2.9.6-5.7 1-8.5 1-3.4 0-6.6-.4-9.5-1.2s-5.5-2-7.6-3.5c-2.1-1.6-3.8-3.5-5-5.9-1.2-2.3-1.9-5.1-2-8.4h12.1v.1zm39.5-36.9h9.1v-16.4h12v16.3h10.8v8.9h-10.8v29c0 1.3.1 2.3.2 3.3.1.9.4 1.7.7 2.3.4.6 1 1.1 1.7 1.4.8.3 1.8.5 3.2.5.8 0 1.7 0 2.5-.1s1.7-.2 2.5-.4v9.3c-1.3.2-2.6.3-3.9.4-1.3.2-2.5.2-3.9.2-3.2 0-5.7-.3-7.6-.9s-3.4-1.5-4.5-2.6c-1.1-1.2-1.8-2.6-2.2-4.3s-.6-3.8-.7-6v-32h-9.1v-9.1zm40.3 0h11.3v7.4h.2c1.7-3.2 4-5.4 7-6.8s6.2-2.1 9.8-2.1c4.3 0 8 .7 11.2 2.3 3.2 1.5 5.8 3.5 7.9 6.2 2.1 2.6 3.7 5.7 4.7 9.2s1.6 7.3 1.6 11.2c0 3.7-.5 7.2-1.4 10.6-1 3.4-2.4 6.5-4.3 9.1s-4.3 4.7-7.3 6.3-6.4 2.4-10.4 2.4c-1.7 0-3.5-.2-5.2-.5s-3.4-.8-5-1.5-3.1-1.6-4.4-2.7c-1.4-1.1-2.5-2.4-3.4-3.8h-.2v27.1h-12v-74.4zm41.9 27.2c0-2.4-.3-4.8-1-7.1-.6-2.3-1.6-4.3-2.9-6.1s-2.9-3.2-4.7-4.3c-1.9-1.1-4.1-1.6-6.5-1.6-5 0-8.8 1.7-11.4 5.2-2.5 3.5-3.8 8.2-3.8 14 0 2.8.3 5.3 1 7.6s1.6 4.3 3 6c1.3 1.7 2.9 3 4.8 4s4 1.5 6.5 1.5c2.8 0 5-.6 6.9-1.7s3.4-2.6 4.7-4.3c1.2-1.8 2.1-3.8 2.6-6.1.5-2.4.8-4.7.8-7.1zm21.1-47.9h12v11.3h-12zm0 20.7h12v54.3h-12zm22.7-20.7h12v75h-12zm48.6 76.5c-4.3 0-8.2-.7-11.6-2.2s-6.2-3.4-8.6-5.9c-2.3-2.5-4.1-5.6-5.3-9.1s-1.9-7.4-1.9-11.5.6-7.9 1.9-11.4c1.2-3.5 3-6.5 5.3-9.1 2.3-2.5 5.2-4.5 8.6-5.9s7.3-2.2 11.6-2.2 8.2.7 11.6 2.2c3.4 1.4 6.2 3.4 8.6 5.9 2.3 2.5 4.1 5.6 5.3 9.1s1.9 7.3 1.9 11.4c0 4.2-.6 8-1.9 11.5s-3 6.5-5.3 9.1c-2.3 2.5-5.2 4.5-8.6 5.9s-7.2 2.2-11.6 2.2zm0-9.5c2.6 0 5-.6 6.9-1.7 2-1.1 3.5-2.6 4.8-4.4s2.2-3.9 2.8-6.1c.6-2.3.9-4.6.9-7 0-2.3-.3-4.6-.9-6.9s-1.5-4.3-2.8-6.1-2.9-3.2-4.8-4.3c-2-1.1-4.3-1.7-6.9-1.7s-5 .6-6.9 1.7c-2 1.1-3.5 2.6-4.8 4.3-1.3 1.8-2.2 3.8-2.8 6.1s-.9 4.6-.9 6.9c0 2.4.3 4.7.9 7s1.5 4.3 2.8 6.1 2.9 3.3 4.8 4.4c2 1.2 4.3 1.7 6.9 1.7zm31-46.3h9.1v-16.4h12v16.3h10.8v8.9h-10.8v29c0 1.3.1 2.3.2 3.3.1.9.4 1.7.7 2.3.4.6 1 1.1 1.7 1.4.8.3 1.8.5 3.2.5.8 0 1.7 0 2.5-.1s1.7-.2 2.5-.4v9.3c-1.3.2-2.6.3-3.9.4-1.3.2-2.5.2-3.9.2-3.2 0-5.7-.3-7.6-.9s-3.4-1.5-4.5-2.6c-1.1-1.2-1.8-2.6-2.2-4.3s-.6-3.8-.7-6v-32h-9.1v-9.1z"/><path d="m164.2 300.7h-54.9l-16.9-52.2-17 52.2-54.9-.1 44.4 32.3-17 52.2 44.4-32.3 44.4 32.3-16.9-52.2z" fill="#00b67a"/><path d="m123.6 344.7-3.8-11.8-27.4 19.9z" fill="#005128"/></svg>
+      </div>
+      <h2>{{ section.settings.title | escape }}</h2>
+    </div>
+  {%- endif -%}
+
+  <!-- Slider main container -->
+  <div class="swiper" id="reviews-swiper-{{ section.id }}">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+      <!-- Slides -->
+      {% for block in section.blocks %}
+        <div class="swiper-slide">
+          <div class="rc-review-card" style="--rc-card-bg: {{ block.settings.card_bg | default: 'transparent' }}; --rc-card-color: {{ block.settings.card_color | default: 'inherit' }};">
+            <div class="rc-header">
+              <div>
+                <div class="rc-name">{{ block.settings.name }}</div>
+                <div class="rc-date">{{ block.settings.date }}</div>
+                <div class="rc-stars">
+                  {% for i in (1..5) %}
+                    {% if i <= block.settings.rating %}
+                      <svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568L24 9.423l-6 5.847L19.335 24 12 20.201 4.665 24 6 15.27 0 9.423l8.332-1.268z" /></svg>
+                    {% else %}
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M12 .587l3.668 7.568L24 9.423l-6 5.847L19.335 24 12 20.201 4.665 24 6 15.27 0 9.423l8.332-1.268z" /></svg>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <p class="rc-text">{{ block.settings.text }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <!-- If we need pagination -->
+    <!-- <div class="swiper-pagination"></div> -->
+    <!-- If we need navigation buttons -->
+    <!-- <div class="swiper-button-prev"></div> -->
+    <!-- <div class="swiper-button-next"></div> -->
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const swiperContainer = document.getElementById('reviews-swiper-{{ section.id }}');
+    if (!swiperContainer) return;
+
+    const swiperInstance = new Swiper(swiperContainer, {
+      // Core parameters
+      loop: true,
+      slidesPerView: {{ section.settings.swiper_slides_mobile }},
+      spaceBetween: {{ section.settings.swiper_space_between }},
+      freeMode: false,
+      /* freeModeMomentum: false, */ // Removing this for testing
+
+      // Autoplay for constant scroll
+      autoplay: {
+        delay: {{ section.settings.swiper_delay }}, // Re-link to small delay setting
+        disableOnInteraction: false, // Keep playing after user interaction
+        pauseOnMouseEnter: {{ section.settings.swiper_pause_on_hover }},
+      },
+      
+      // Main transition speed (set back to small value)
+      speed: {{ section.settings.swiper_speed }}, // Use the setting value
+
+      // Responsive breakpoints
+      breakpoints: {
+        // when window width is >= 768px
+        768: {
+          slidesPerView: {{ section.settings.swiper_slides_tablet }},
+          spaceBetween: {{ section.settings.swiper_space_between }}
+        },
+        // when window width is >= 990px
+        990: {
+          slidesPerView: {{ section.settings.swiper_slides_desktop }},
+          spaceBetween: {{ section.settings.swiper_space_between }}
+        }
+      },
+      
+      // Optional: Add modules if needed (e.g., Navigation, Pagination)
+      // navigation: {
+      //   nextEl: '.swiper-button-next',
+      //   prevEl: '.swiper-button-prev',
+      // },
+      // pagination: {
+      //   el: '.swiper-pagination',
+      //   clickable: true,
+      // },
+    });
+
+    // Optional: Stop autoplay when the section is not visible
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          swiperInstance.autoplay.start();
+        } else {
+          swiperInstance.autoplay.stop();
+        }
+      });
+    });
+    observer.observe(swiperContainer);
+
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Reviews Carousel (Swiper)", /* Updated Name */
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Wat onze klanten zeggen" /* Updated default to Dutch */
+    },
+    /* Removed speed, card_width, card_gap - Handled by Swiper options */
+    { "type": "range", "id": "card_radius", "label": "Card border radius (px)", "min": 0, "max": 50, "step": 2, "default": 16 },
+    /* { "type": "color", "id": "star_color", "label": "Star color", "default": "#D4B07A" }, */ /* Color is now fixed green */
+    {
+      "type": "header",
+      "content": "Swiper Carousel Settings"
+    },
+    {
+      "type": "range",
+      "id": "swiper_speed",
+      "label": "Transition Speed (ms)", /* Updated label slightly */
+      "min": 100,
+      "max": 9000, /* Increased max speed significantly */
+      "step": 100, /* Increased step slightly */
+      "default": 9000, /* Increased default slightly */
+      "info": "Transition speed for slides. Higher values slow down the scroll."
+    },
+    {
+      "type": "range",
+      "id": "swiper_delay",
+      "label": "Autoplay Delay (ms - use 1 for continuous)",
+      "min": 1,
+      "max": 100, /* Keep max low */
+      "step": 1,
+      "default": 1,
+      "info": "Minimal delay between transitions. Set to 1ms."
+    },
+     {
+      "type": "range",
+      "id": "swiper_slides_desktop",
+      "label": "Slides per view (Desktop)",
+      "min": 1,
+      "max": 6,
+      "step": 0.5, /* Allow partial slides */
+      "default": 3.5
+    },
+    {
+      "type": "range",
+      "id": "swiper_slides_tablet",
+      "label": "Slides per view (Tablet)",
+      "min": 1,
+      "max": 4,
+      "step": 0.5,
+      "default": 2.5
+    },
+     {
+      "type": "range",
+      "id": "swiper_slides_mobile",
+      "label": "Slides per view (Mobile)",
+      "min": 1,
+      "max": 3,
+      "step": 0.5,
+      "default": 1.5
+    },
+    {
+      "type": "range",
+      "id": "swiper_space_between",
+      "label": "Space between slides (px)",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 24
+    },
+    /* {
+       "type": "checkbox",
+       "id": "swiper_free_mode",
+       "label": "Enable Free Mode",
+       "default": true,
+       "info": "Allows free scrolling without snapping to slides. Good for continuous effect."
+    }, */
+    {
+       "type": "checkbox",
+       "id": "swiper_pause_on_hover",
+       "label": "Pause autoplay on hover",
+       "default": true
+    }
+    /* Removed old mobile settings */
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        /* { "type": "image_picker", "id": "avatar", "label": "Avatar image" }, */ /* Removed Avatar Setting */
+        { "type": "text", "id": "name", "label": "Reviewer name", "default": "John Doe" },
+        { "type": "text", "id": "date", "label": "Date", "default": "March 6, 3:45 PM" },
+        { "type": "range", "id": "rating", "label": "Rating (1-5)", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "textarea", "id": "text", "label": "Review text", "default": "Amazing service! Highly recommended." },
+        { "type": "color", "id": "card_bg", "label": "Card background color", "default": "#ffffff" },
+        { "type": "color", "id": "card_color", "label": "Text color", "default": "#333333" }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    { "name": "Reviews Carousel (Swiper)" } /* Updated Name */
+  ]
+}
+{% endschema %}

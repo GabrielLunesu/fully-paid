@@ -1,9 +1,80 @@
 variant-selects {
   display: block;
 }
-.select__select {
-  border: none !important;
+
+/* Style the new variant group container - Match .atc-shipping-box */
+.variant-option-group {
+  background-color: #fff !important; /* White background */
+  padding: 1rem; /* Padding matching ATC box */
+  margin-top: 1rem; /* Add space above */
+
+  margin-bottom: 1rem; /* Space below matching ATC box */
+  border-radius: 8px; /* Rounded corners matching ATC box */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Shadow matching ATC box */
 }
+
+.variant-option-group__title {
+  font-size: 1.2rem; /* Further reduced size */
+  margin: 0 0 0.6rem 0; /* Adjusted margin */
+  font-weight: 600;
+}
+
+.select__select {
+  /* Re-apply glossy styles */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  display: block;
+  width: 100%;
+  color: #000000 !important;
+
+  font-size: 0.9rem !important; /* Further reduced size */
+  line-height: 1.2; /* Adjust line-height */
+  padding: 0.4rem 3.5rem 0.4rem 1rem; /* Further adjusted padding */
+
+  /* Glossy Effect on White BG */
+  background-color: #fff !important; /* Explicit white */
+  background-image: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0) 50%, rgba(0,0,0,0.02) 51%, rgba(0,0,0,0.05)); /* Subtle gradient for gloss */
+  border: none; /* Remove border */
+  border-radius: 12px !important; /* Slightly more rounded corners */
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.75), /* Inner highlight */
+              0 1px 2px rgba(var(--color-shadow), 0.1); /* Subtle outer shadow */
+  transition: box-shadow var(--duration-short) ease; /* Adjusted transition */
+}
+.variant-option-group__title {
+  font-size: 1rem !important; /* Further reduced size */
+  margin: 0 0 0.6rem 0; /* Adjusted margin */
+  font-weight: 600;
+}
+
+.select__select:focus {
+  outline: none;
+  border: none; /* Ensure no border on focus either */
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1), /* Darken inner shadow on focus */
+              0 0 0 2px rgba(var(--color-foreground), 0.15); /* Focus ring */
+}
+
+/* Position the custom arrow */
+.select {
+  position: relative;
+}
+
+.select .svg-wrapper {
+  position: absolute;
+  right: 1.2rem; /* Adjusted position slightly for padding change */
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  width: 0.9rem; /* Slightly smaller arrow */
+  height: 0.9rem;
+}
+
+.select .svg-wrapper svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .product--no-media .product-form__input--pill,
 .product--no-media .product-form__input--swatch,
 .product--no-media .product-form__input--dropdown {
@@ -79,6 +150,14 @@ variant-selects {
   transition: border var(--duration-short) ease;
   cursor: pointer;
   position: relative;
+
+  /* Glossy Effect */
+  background-color: rgb(var(--color-background)); /* Base color */
+  background-image: linear-gradient(to bottom, rgba(255,255,255,0.5), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 51%, rgba(0,0,0,0.0));
+  border: 1px solid rgba(var(--color-foreground), 0.15);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.5), /* Inner highlight */
+              0 1px 1px rgba(var(--color-shadow), 0.1); /* Subtle outer shadow */
+  transition: border-color var(--duration-short) ease, box-shadow var(--duration-short) ease, background-color var(--duration-short) ease, color var(--duration-short) ease;
 }
 
 .product-form__input--pill input[type="radio"] + label:before {
@@ -102,7 +181,10 @@ variant-selects {
 
 .product-form__input--pill input[type="radio"]:checked + label {
   background-color: rgb(var(--color-foreground));
+  background-image: linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 51%, rgba(0,0,0,0.2));
   color: rgb(var(--color-background));
+  border-color: rgba(var(--color-foreground), 0.5);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
 }
 
 @media screen and (forced-colors: active) {
@@ -132,8 +214,10 @@ variant-selects {
   color: rgba(var(--color-background), 0.6);
 }
 .product-form__input--pill input[type="radio"]:focus-visible + label {
-  box-shadow: 0 0 0 0.3rem rgb(var(--color-background)),
-    0 0 0 0.5rem rgba(var(--color-foreground), 0.55);
+  outline: none;
+  border-color: rgba(var(--color-foreground), 0.4);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1), /* Darken inner shadow on focus */
+              0 0 0 3px rgba(var(--color-foreground), 0.1); /* Focus ring */
 }
 
 /* Fallback */

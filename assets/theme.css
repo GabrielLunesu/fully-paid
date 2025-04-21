@@ -8299,3 +8299,8 @@ ul {
   color: #ffffff;
   font-weight: 600;
 }
+
+.product-gallery__carousel-with-arrows .product-gallery__media > img {
+  /* ... existing code ... */
+  border-radius: 0.75rem; /* Added rounding */
+}
