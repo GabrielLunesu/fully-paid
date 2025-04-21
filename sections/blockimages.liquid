@@ -3,6 +3,12 @@
     #shopify-section-template--{{ section.id }} {
       --media-grid-row-height: 220px;
       --media-grid-gap: 1.5rem;
+      background-color: #FFFFFF;
+    }
+
+    /* Override gradient from color-scheme */
+    #shopify-section-template--{{ section.id }} > .section-spacing {
+        background-image: none;
     }
 
     @media screen and (min-width: 700px) {
