@@ -896,4 +896,20 @@ footer .payment-icons .payment-icon {
   }
 }
 
+@media screen and (min-width: 990px) {
+  ul#product-grid {
+    column-gap: 3rem !important;
+    row-gap: 8rem !important;
+  }
+}
 
+.pagination__list {
+ font-size: 0.8rem !important;
+}
+
+*, :before, :after {
+  box-sizing: border-box;
+  border-style: solid;
+  border-width: 0;
+  border-color: #0462f800 !important;
+}

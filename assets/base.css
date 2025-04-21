@@ -25,8 +25,9 @@ h1.collection-hero__title {
 }
 ul#product-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 2rem; /* Use theme variable or fixed value */
+  row-gap: 3rem; /* Use theme variable or fixed value */
 }
 ul#HeaderMenu-MenuList-1 {
   border: solid grey;
@@ -1486,13 +1487,12 @@ summary::-webkit-details-marker {
 
 /* component-grid */
 .grid {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 2rem;
-  padding: 0;
   list-style: none;
-  column-gap: var(--grid-mobile-horizontal-spacing);
-  row-gap: var(--grid-mobile-vertical-spacing);
+  margin: 0;
+  padding: 0;
+  margin-bottom: var(--grid-desktop-vertical-spacing);
+  column-gap: var(--grid-desktop-horizontal-spacing);
+  row-gap: var(--grid-desktop-vertical-spacing);
 }
 
 @media screen and (min-width: 750px) {

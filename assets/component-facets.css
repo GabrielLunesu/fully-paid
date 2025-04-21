@@ -1146,10 +1146,12 @@ input.mobile-facets__checkbox {
   transform: translateY(-50%);
   width: 1.8rem;
 }
-
 @media screen and (min-width: 750px) {
   .facets-vertical {
-    display: flex;
+    display: grid;
+    grid-template-columns: 24rem 1fr;
+    column-gap: 2.5rem;
+    align-items: flex-start;
   }
 
   .facets-wrap-vertical {
@@ -1281,3 +1283,4 @@ input.mobile-facets__checkbox {
     padding: 0 1rem 1rem;
   }
 }
+

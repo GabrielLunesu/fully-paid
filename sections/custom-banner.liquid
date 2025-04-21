@@ -1,0 +1,163 @@
+{% comment %}
+  Custom Banner Section
+  Allows adding a banner with separate desktop/mobile images,
+  adjustable height, and full-width option.
+{% endcomment %}
+
+{%- liquid
+  assign desktop_image = section.settings.desktop_image
+  assign mobile_image = section.settings.mobile_image | default: desktop_image
+  assign full_width = section.settings.full_width
+  assign desktop_height = section.settings.desktop_height
+  assign mobile_height = section.settings.mobile_height
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+
+  assign section_id = 'custom-banner-' | append: section.id
+-%}
+
+{%- style -%}
+  #{{ section_id }} .custom-banner__image-container {
+    height: {{ mobile_height }}px;
+  }
+
+  #{{ section_id }} .custom-banner__image {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media screen and (min-width: 750px) {
+    #{{ section_id }} .custom-banner__image-container {
+      height: {{ desktop_height }}px;
+    }
+  }
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ padding_top }}px;
+      padding-bottom: {{ padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div id="{{ section_id }}" class="section-{{ section.id }}-padding">
+  <div class="{% unless full_width %}page-width{% endunless %}">
+    <div class="custom-banner__image-container">
+      {%- if desktop_image != blank or mobile_image != blank -%}
+        <picture>
+          {%- if mobile_image != blank -%}
+            <source
+              media="(max-width: 749px)"
+              srcset="{{ mobile_image | image_url: width: mobile_image.width }}"
+            >
+          {%- endif -%}
+          {%- if desktop_image != blank -%}
+            <img
+              src="{{ desktop_image | image_url: width: desktop_image.width }}"
+              alt="{{ desktop_image.alt | default: 'Banner image' | escape }}"
+              width="{{ desktop_image.width }}"
+              height="{{ desktop_image.height }}"
+              class="custom-banner__image"
+              loading="lazy"
+            >
+          {%- elsif mobile_image != blank -%}
+             <img
+              src="{{ mobile_image | image_url: width: mobile_image.width }}"
+              alt="{{ mobile_image.alt | default: 'Banner image' | escape }}"
+              width="{{ mobile_image.width }}"
+              height="{{ mobile_image.height }}"
+              class="custom-banner__image"
+              loading="lazy"
+            >
+          {%- else -%}
+             {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </picture>
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Desktop Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Image",
+      "info": "Optional. Uses Desktop Image if blank."
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "min": 200,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Height",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "min": 100,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "label": "Mobile Height",
+      "default": 300
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make section full width",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Banner"
+    }
+  ]
+}
+{% endschema %} 
