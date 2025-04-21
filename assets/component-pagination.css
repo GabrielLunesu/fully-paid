@@ -84,3 +84,33 @@ a.pagination__item:not(.pagination__item--current):hover {
 .pagination__item-arrow:hover::after {
   display: none;
 }
+
+/* Responsive Pagination for Mobile */
+@media screen and (max-width: 749px) {
+  .pagination__list > li {
+    /* Hide most page number list items by default */
+    display: none;
+  }
+
+  .pagination__list > li:first-child, /* Always show Prev arrow */
+  .pagination__list > li:last-child, /* Always show Next arrow */
+  .pagination__list > li:nth-child(2), /* Always show first page number li */
+  .pagination__list > li:nth-last-child(2) { /* Always show last page number li */
+    display: block; /* Or inline-block/flex depending on desired layout */
+  }
+
+  /* Show current page and its immediate neighbors */
+  .pagination__list > li .pagination__item--current {
+    /* Select the parent li of the current item */
+    /* Unfortunately, :has() is not fully supported, so we might need JS or Liquid changes for perfect neighbor showing */
+    /* For now, let's just ensure the current one shows */
+  }
+   .pagination__list > li:has(> .pagination__item--current) {
+       display: block;
+   }
+
+  /* Show ellipses if they exist */
+  .pagination__list > li:has(> span.pagination__item) { /* Target li containing the span for ellipses */
+    display: block;
+  }
+}
